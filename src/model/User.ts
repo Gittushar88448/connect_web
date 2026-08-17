@@ -7,16 +7,32 @@ export enum Account {
     CUSTOMER = "Customer",
 }
 
-export interface User extends Document {
+export enum Gender {
+    MALE = "male",
+    FEMALE = "female",
+    OTHER = "other",
+    PREFER_NOT_TO_SAY = "prefer_not_to_say",
+}
+
+export enum UserStatus {
+    ACTIVE = "active",
+    PENDING = "pending",
+    INACTIVE = "inactive",
+    SUSPENDED = "suspended",
+}
+
+export interface IUser extends Document {
     firstName: string;
     lastName?: string;
     email: string;
     password: string;
     account: Account;
+    userStatus: UserStatus;
     type?: number;
     is_verified?: boolean;
-    gender: string;
-    dob: string;
+    gender: Gender;
+    dob: Date;
+    coinBalance?: number;
     phone_no: string;
     image?: string;
     token?: string;
@@ -25,7 +41,7 @@ export interface User extends Document {
     updatedAt: Date;
 }
 
-const userSchema: Schema<User> = new mongoose.Schema(
+const userSchema: Schema<IUser> = new mongoose.Schema(
     {
         firstName: {
             type: String,
@@ -70,11 +86,11 @@ const userSchema: Schema<User> = new mongoose.Schema(
         gender: {
             type: String,
             required: [true, "Gender is required"],
-            trim: true,
+            enum: Object.values(Gender)
         },
 
         dob: {
-            type: String,
+            type: Date,
             required: [true, "Date of birth is required"],
         },
 
@@ -89,9 +105,21 @@ const userSchema: Schema<User> = new mongoose.Schema(
             default: "",
         },
 
+        userStatus: {
+            type: String,
+            enum: Object.values(UserStatus),
+            default: UserStatus.PENDING
+        },
+
         token: {
             type: String,
             default: ""
+        },
+
+        coinBalance: {
+            type: Number,
+            default: 0,
+            min: 0
         },
 
         is_deleted: {
@@ -104,7 +132,7 @@ const userSchema: Schema<User> = new mongoose.Schema(
     }
 );
 
-userSchema.pre("save", async function () : Promise<any> {
+userSchema.pre("save", async function (): Promise<any> {
     if (!this.isModified("password")) {
         return;
     }
@@ -116,7 +144,7 @@ userSchema.pre("save", async function () : Promise<any> {
 });
 
 const UserModel =
-    (mongoose.models.User as mongoose.Model<User>) ||
-    mongoose.model<User>("User", userSchema);
+    (mongoose.models.IUser as mongoose.Model<IUser>) ||
+    mongoose.model<IUser>("User", userSchema);
 
 export default UserModel;
