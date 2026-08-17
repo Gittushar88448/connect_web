@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "./logger";
 
 type connectionObject = {
     isConnected?: number
@@ -8,7 +9,7 @@ const connection: connectionObject = {};
 
 async function dbConnect(): Promise<void> {
     if (connection.isConnected) {
-        console.log("Connection Already Exists!!");
+        logger.info("Connection Already Exists!!");
         return;
     }
     try {
@@ -17,9 +18,9 @@ async function dbConnect(): Promise<void> {
 
         connection.isConnected = db.connections[0].readyState;
 
-        console.log('Database connected successfully');
+        logger.info('Database connected successfully');
     } catch (error) {
-        console.error('Database connection failed:', error);
+        logger.error('Database connection failed:', error);
         process.exit(1);
     }
 }
