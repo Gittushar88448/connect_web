@@ -85,18 +85,15 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
 
         gender: {
             type: String,
-            required: [true, "Gender is required"],
             enum: Object.values(Gender)
         },
 
         dob: {
             type: Date,
-            required: [true, "Date of birth is required"],
         },
 
         phone_no: {
             type: String,
-            required: [true, "Phone number is required"],
             trim: true,
         },
 
@@ -144,7 +141,7 @@ userSchema.pre("save", async function (): Promise<any> {
 });
 
 const UserModel =
-    (mongoose.models.IUser as mongoose.Model<IUser>) ||
-    mongoose.model<IUser>("User", userSchema);
+  (mongoose.models.User as mongoose.Model<IUser>) ||
+  mongoose.model<IUser>("User", userSchema);
 
 export default UserModel;
