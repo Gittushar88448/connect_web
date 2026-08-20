@@ -2,7 +2,6 @@ import { sendVerificationEmail } from "@/helper/sendVerificationMail";
 import dbConnect from "@/lib/dbConnect";
 import OTPModel from "@/model/OTP";
 import UserModel from "@/model/User";
-import otpGenerator from "otp-generator";
 import { randomInt } from "crypto";
 import logger from "@/lib/logger";
 
@@ -27,6 +26,7 @@ export async function POST(req: Request) {
         const existingUser = await UserModel.findOne({
             email,
             is_verified: true,
+            is_deleted: false
         });
 
         if (existingUser) {

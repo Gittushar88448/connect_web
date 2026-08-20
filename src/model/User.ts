@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 export enum Account {
     SUPERADMIN = "superadmin",
     ADMIN = "admin",
-    CUSTOMER = "Customer",
+    CUSTOMER = "customer",
 }
 
 export enum Gender {
@@ -35,7 +35,6 @@ export interface IUser extends Document {
     coinBalance?: number;
     phone_no: string;
     image?: string;
-    token?: string;
     is_deleted?: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -106,11 +105,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
             type: String,
             enum: Object.values(UserStatus),
             default: UserStatus.PENDING
-        },
-
-        token: {
-            type: String,
-            default: ""
         },
 
         coinBalance: {
