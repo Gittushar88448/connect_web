@@ -1,4 +1,4 @@
-export const ACCESS_TOKEN_EXPIRES_IN = "15m";
+export const ACCESS_TOKEN_EXPIRES_IN = "10m";
 
 export const REFRESH_TOKEN_EXPIRES_IN_DAYS = 30;
 

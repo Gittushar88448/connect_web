@@ -1,7 +1,8 @@
-import { sendVerificationEmail } from "@/helper/sendVerificationMail";
+import { sendEmail } from "@/helper/sendVerificationMail";
 import dbConnect from "@/lib/dbConnect";
 import OTPModel from "@/model/OTP";
 import UserModel from "@/model/User";
+import emailVerificationTemplate from "../../../../../emails/userVerification";
 import { randomInt } from "crypto";
 import logger from "@/lib/logger";
 
@@ -67,12 +68,18 @@ export async function POST(req: Request) {
 
         await otpResult.save();
 
-        // Send email
-        await sendVerificationEmail(
-            email,
-            firstName,
-            otp
+        const html: string = emailVerificationTemplate(
+            otp,
+            firstName
         );
+
+            await sendEmail(
+                {
+                    email,
+                    subject_text: `Verify Your Connected Hub Account`,
+                    body: html
+                }
+            );
 
         return Response.json(
             {

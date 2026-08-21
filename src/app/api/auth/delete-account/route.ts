@@ -8,8 +8,7 @@ import UserModel from "@/model/User";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
 import RevokedUser from "../../../../model/RevokedRegisteredUser";
-import OTPModel from "@/model/OTP";
-import { success } from "zod";
+import OTPModel from "@/model/OTP"; 
 
 export async function POST(
 ): Promise<any> {
@@ -160,7 +159,7 @@ export async function POST(
                 message: "failed To Delted Account"
             }, {status: 400})
         }
-        
+
         return Response.json(
             {
                 success: true,

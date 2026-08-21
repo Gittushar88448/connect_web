@@ -1,38 +1,35 @@
 import transporter from "@/lib/nodemailerConfig";
-import emailVerificationTemplate from "../../emails/userVerification";
 import logger from "@/lib/logger";
 
-export async function sendVerificationEmail(
-  email: string,
-  firstName: string,
-  otp: string
-) {
-  try {
-    const html = emailVerificationTemplate(
-        otp,
-      firstName
-    );
+export interface IMailType {
+    email: string,
+    subject_text: string,
+    body: string
+}
 
-    const mailOptions = {
-      from:`"${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
+export async function sendEmail(
+    { email, subject_text, body
+    }: IMailType) {
+    try {
 
-      to: email,
+        const mailOptions = {
+            from: `${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
 
-      subject: "Verify Your Connected Hub Account",
+            to: email,
 
-      html,
-    };
-    const result = await transporter.sendMail(mailOptions);
-    logger.info("mail result", result)
+            subject: subject_text,
 
-    return {
-      success: true,
-      messageId: result.messageId,
-    };
+            html: body,
+        };
+        const result = await transporter.sendMail(mailOptions);
+        return {
+            success: true,
+            messageId: result.messageId,
+        };
 
-  } catch (error) {
-    logger.error("Error sending verification email:", error);
+    } catch (error) {
+        logger.error("Error sending verification email:", error);
 
-    throw error;
-  }
+        throw error;
+    }
 }
