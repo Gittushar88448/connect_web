@@ -35,6 +35,8 @@ export interface IUser extends Document {
     coinBalance?: number;
     phone_no: string;
     image?: string;
+    forgot_pass_token?: string;
+    forgot_pass_token_expiry: number;
     is_deleted?: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -89,6 +91,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
 
         dob: {
             type: Date,
+            default: null
         },
 
         phone_no: {
@@ -111,6 +114,14 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
             type: Number,
             default: 0,
             min: 0
+        },
+
+        forgot_pass_token: {
+            type: String
+        },
+
+        forgot_pass_token_expiry: {
+            type: Number
         },
 
         is_deleted: {
