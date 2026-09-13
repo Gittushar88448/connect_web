@@ -36,7 +36,7 @@ const ModuleSchema = new Schema(
 
 export type ModuleDocument = InferSchemaType<typeof ModuleSchema>;
 export const ModuleModel = (models.ModuleSchema as Model<ModuleDocument>) ||
-  model<ModuleDocument>(
+  model(
      "Module",
      ModuleSchema
    );
