@@ -23,8 +23,8 @@ export async function proxy(
   }
 
   // Get access token
-  const accessToken =
-    request.cookies.get("accessToken")?.value;
+    const accessToken =
+      request.cookies.get("accessToken")?.value;
 
   if (!accessToken) {
     return NextResponse.json(

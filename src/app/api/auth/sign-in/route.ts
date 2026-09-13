@@ -19,8 +19,9 @@ import {
 } from "@/lib/auth/refreshToken";
 
 import {
-    setAccessTokenCookie,
+  setAccessTokenCookie,
   setRefreshTokenCookie,
+  setUserProfile,
 } from "@/lib/auth/session";
 
 import {
@@ -123,7 +124,7 @@ export async function POST(req: Request) {
       await createAccessToken(
         user._id.toString(),
         user.account
-    );
+      );
 
     const refreshToken =
       generateRefreshToken();
@@ -138,11 +139,11 @@ export async function POST(req: Request) {
 
     const expiresAt = new Date(
       Date.now() +
-        REFRESH_TOKEN_EXPIRES_IN_DAYS *
-          24 *
-          60 *
-          60 *
-          1000
+      REFRESH_TOKEN_EXPIRES_IN_DAYS *
+      24 *
+      60 *
+      60 *
+      1000
     );
 
     await RefreshTokenModel.create({
@@ -158,6 +159,18 @@ export async function POST(req: Request) {
     await setRefreshTokenCookie(
       refreshToken
     );
+
+    await setUserProfile({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      account: user.account,
+      userStatus: user.userStatus,
+      coinBalance:
+        user.coinBalance,
+      image: user.image,
+    });
 
     return Response.json(
       {
