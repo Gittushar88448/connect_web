@@ -35,8 +35,6 @@ const ModuleSchema = new Schema(
 );
 
 export type ModuleDocument = InferSchemaType<typeof ModuleSchema>;
-export const ModuleModel = (models.ModuleSchema as Model<ModuleDocument>) ||
-  model(
-     "Module",
-     ModuleSchema
-   );
+export const ModuleModel = 
+  (models.Module as Model<ModuleDocument>) || 
+  model<ModuleDocument>("Module", ModuleSchema);
