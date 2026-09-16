@@ -16,6 +16,12 @@ const bodyFont = Inter({
   subsets: ["latin"],
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk', // Optional: for Tailwind CSS CSS variables
+  display: 'swap',
+});
+
 const dataFont = JetBrains_Mono({
   variable: "--font-data",
   subsets: ["latin"],
@@ -48,7 +54,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} ${dataFont.variable} h-full antialiased`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${dataFont.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <AuthProvider initialUser={initialUser}>
