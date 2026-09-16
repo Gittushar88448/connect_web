@@ -24,3 +24,16 @@ export const customSolutionSchema = z.object({
 });
 
 export type CustomSolutionFormValues = z.infer<typeof customSolutionSchema>;
+
+export const customRequestStatuses = [
+  "pending",
+  "accepted",
+  "rejected",
+  "appointment_booked",
+] as const;
+
+export const updateRequestStatusSchema = z.object({
+  status: z.enum(customRequestStatuses),
+  appointmentAt: z.string().datetime().optional().nullable(),
+  adminNote: z.string().trim().optional(),
+});
