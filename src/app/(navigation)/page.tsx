@@ -6,15 +6,18 @@ import { ModulesShowcase } from "@/components/store/modules-showcase";
 import { WhyConnectHub } from "@/components/store/why-connect-hub";
 import { CustomSolutionsCta } from "@/components/store/custom-solutions-cta";
 import { Testimonials } from "@/components/store/testimonials";
+import { listModules } from "@/services/modules_ops";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const modules = await listModules({ activeOnly: true });
+
   return (
     <>
       <Hero />
       <StatusBar />
       <ServicesRail />
       <EngagementJourney />
-      <ModulesShowcase />
+      <ModulesShowcase modules={modules.slice(0, 4)} />
       <WhyConnectHub />
       <CustomSolutionsCta />
       <Testimonials />

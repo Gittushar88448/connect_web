@@ -41,7 +41,9 @@ export function VerifyOtpForm() {
 
     setError(null);
     setSubmitting(true);
+    
 // using use contxt api hook we get the data 
+
     // try {
     //   const response = await fetch('/api/auth/send-otp', {
     //     method: "POST",
@@ -70,10 +72,30 @@ export function VerifyOtpForm() {
   }
 
   async function handleResend() {
+    try{
     setResending(true);
-    // TODO: replace with POST /api/auth/resend-otp { email }.
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setResending(false);
+     const response = await fetch('/api/auth/send-otp', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setError(data.message || "Failed to send OTP");
+        return;
+      }
+
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    }finally{
+      setResending(false);
+    }
     setSecondsLeft(RESEND_SECONDS);
   }
 
@@ -114,7 +136,7 @@ export function VerifyOtpForm() {
             </span>
           ) : (
             <button
-              type="button"
+              type="button" 
               onClick={handleResend}
               disabled={resending}
               className="font-medium text-brand-signal-bright hover:underline disabled:opacity-50"

@@ -54,6 +54,7 @@ export function RequestForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submittedTitle, setSubmittedTitle] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function update<K extends keyof Values>(key: K, value: Values[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -90,15 +91,26 @@ export function RequestForm() {
 
     setErrors({});
     setSubmitting(true);
+    setSubmitError(null);
 
-    // TODO: replace with POST /api/custom-requests once the
-    // CustomSolutionRequest Mongoose model and admin review queue are
-    // wired up.
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    setSubmitting(false);
-    setSubmittedTitle(parsed.data.projectTitle);
-    setValues(initialValues);
+    try {
+      const res = await fetch("/api/custom-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+      setSubmittedTitle(parsed.data.projectTitle);
+      setValues(initialValues);
+    } catch {
+      setSubmitError("Network error — check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submittedTitle) {
@@ -312,6 +324,8 @@ export function RequestForm() {
           <input type="file" multiple className="sr-only" />
         </label>
       </div>
+
+      {submitError && <p className="text-sm text-destructive">{submitError}</p>}
 
       <Button type="submit" size="lg" disabled={submitting} className="h-11 self-start px-6 text-sm">
         {submitting ? <Loader2 className="animate-spin" /> : <Send />}

@@ -32,6 +32,11 @@ export default function SignupPage() {
       confirmPassword: String(formData.get("confirmPassword") ?? ""),
     };
 
+    if(values.password != values.confirmPassword){
+      setFormError("Password Must be Equal")
+      return;
+    }
+
     const parsed = signupSchema.safeParse(values);
     if (!parsed.success) {
       const nextErrors: FieldErrors = {};

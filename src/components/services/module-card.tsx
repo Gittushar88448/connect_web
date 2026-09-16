@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { tintStyles } from "@/components/shared/tint";
-import type { SoftwareModule } from "@/types/service";
+import type { ModuleRecord } from "@/services/modules_ops";
 
 const iconMap: Record<string, LucideIcon> = {
   Users,
@@ -30,7 +30,7 @@ const iconMap: Record<string, LucideIcon> = {
   Workflow,
 };
 
-export function ModuleCard({ module }: { module: SoftwareModule }) {
+export function ModuleCard({ module }: { module: ModuleRecord }) {
   const Icon = iconMap[module.icon] ?? Users;
   const tint = tintStyles[module.color];
 
