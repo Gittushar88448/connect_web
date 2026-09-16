@@ -81,6 +81,7 @@ export function Modal({
                 size="icon-sm"
                 aria-label="Close dialog"
                 onClick={onClose}
+                nativeButton={false}
                 className="shrink-0"
               >
                 <X className="size-4" />

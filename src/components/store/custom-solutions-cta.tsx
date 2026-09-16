@@ -21,22 +21,19 @@ export function CustomSolutionsCta() {
               tailored to exactly how your team works.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                className="h-11 px-6 text-sm"
-                render={<Link href="/custom-solutions" />}
+              <Link
+                href="/custom-solutions"
+                className="bg-brand-signal inline-flex h-11 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium text-white transition-colors hover:bg-[#0b817a]"
               >
                 Start a project
-                <ArrowRight />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-11 border-white/20 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white"
-                render={<Link href="/custom-solutions#how-it-works" />}
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                href="/custom-solutions#how-it-works"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-white/20 bg-transparent px-6 text-sm text-white transition-colors hover:bg-white/10 hover:text-white"
               >
                 How it works
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

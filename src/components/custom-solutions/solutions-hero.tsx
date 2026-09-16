@@ -20,13 +20,14 @@ export function SolutionsHero() {
           integration to a full internal platform.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button size="lg" className="h-11 px-6 text-sm" render={<Link href="#request-form" />}>
+          <Button size="lg" className="h-11 px-6 text-sm" nativeButton={false} render={<Link href="#request-form" />}>
             Start a project
             <ArrowRight />
           </Button>
           <Button
             size="lg"
             variant="outline"
+            nativeButton={false}
             className="h-11 border-white/20 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white"
             render={<Link href="#how-it-works" />}
           >

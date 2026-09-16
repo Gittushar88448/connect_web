@@ -73,6 +73,7 @@ export function Hero() {
             <Button
               size="lg"
               className="h-11 px-6 text-sm"
+              nativeButton={false}
               render={<Link href="/services" />}
             >
               Explore services
@@ -81,6 +82,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
+              nativeButton={false}
               className="h-11 border-white/20 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white"
               render={<Link href="/custom-solutions" />}
             >

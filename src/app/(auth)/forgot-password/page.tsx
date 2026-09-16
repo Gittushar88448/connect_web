@@ -74,7 +74,7 @@ export default function ForgotPasswordPage() {
             {error && <p className="text-xs text-red-300">{error}</p>}
           </div>
 
-          <Button type="submit" size="lg" disabled={submitting} className="mt-2 h-11 text-sm">
+          <Button type="submit" size="lg" disabled={submitting}  className="mt-2 h-11 text-sm">
             {submitting && <Loader2 className="animate-spin" />}
             {submitting ? "Sending…" : "Send reset link"}
           </Button>

@@ -232,6 +232,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
+              nativeButton={false}
               aria-label="Sign in"
               render={<Link href="/login" />}
               className="hidden text-white/80 hover:bg-white/10 hover:text-white sm:inline-flex"
@@ -242,6 +243,7 @@ export function Navbar() {
 
           <Button
             size="sm"
+            nativeButton={false}
             className="hidden h-9 px-4 text-sm sm:inline-flex"
             render={<Link href="/custom-solutions#request-form" />}
           >
@@ -251,6 +253,7 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="icon"
+            nativeButton={false}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
