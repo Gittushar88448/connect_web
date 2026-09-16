@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import { modules } from "@/constants/services";
+import type { ModuleRecord } from "@/services/modules_ops";
 
-export function ModulesHeader() {
+export function ModulesHeader({ modules }: { modules: ModuleRecord[] }) {
   return (
     <div className="bg-signal-grid relative overflow-hidden border-b border-white/10 bg-brand-graphite">
       <div className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black,transparent_75%)]" />

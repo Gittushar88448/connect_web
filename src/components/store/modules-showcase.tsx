@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { Blocks } from "lucide-react";
 
 import { ModuleCard } from "@/components/services/module-card";
-import { modules } from "@/constants/services";
+import type { ModuleRecord } from "@/services/modules_ops";
 
-export function ModulesShowcase() {
+export function ModulesShowcase({ modules }: { modules: ModuleRecord[] }) {
   return (
     <section className="bg-secondary/40 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -34,17 +34,23 @@ export function ModulesShowcase() {
         </div>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {modules.map((module, i) => (
-            <motion.div
-              key={module.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.4, ease: "easeOut", delay: (i % 4) * 0.08 }}
-            >
-              <ModuleCard module={module} />
-            </motion.div>
-          ))}
+          {modules.length === 0 ? (
+            <p className="col-span-full rounded-xl border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
+              Modules are managed by the admin --- none published yet.
+            </p>
+          ) : (
+            modules.map((module, i) => (
+              <motion.div
+                key={module.id}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.4, ease: "easeOut", delay: (i % 4) * 0.08 }}
+              >
+                <ModuleCard module={module} />
+              </motion.div>
+            ))
+          )}
         </div>
 
         <Link
