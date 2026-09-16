@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { RequestDetailModal } from "@/components/admin/request-detail-modal";
 import { AppointmentDialog } from "@/components/admin/appointment-dialog";
 import type { CustomRequestRecord } from "@/services/custom-requests";
+import { apiFetch } from "@/lib/auth/fetchApi";
 
 const statusStyles: Record<CustomRequestRecord["status"], string> = {
   pending: "bg-secondary text-muted-foreground",
@@ -35,7 +36,7 @@ export function CustomRequestsTable({ requests }: { requests: CustomRequestRecor
   ) {
     setPendingId(id);
     try {
-      const res = await fetch(`/api/admin/custom-requests/${id}`, {
+      const res = await apiFetch(`/api/admin/custom-requests/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

@@ -15,6 +15,7 @@ import {
   type ModuleFormValues,
 } from "@/lib/validations/moduleValidations";
 import type { ModuleRecord } from "@/services/modules_ops";
+import { apiFetch } from "@/lib/auth/fetchApi";
 
 function slugify(input: string) {
   return input
@@ -126,7 +127,7 @@ export function ModuleFormDialog({
     setErrors({});
     setSubmitting(true);
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         editing ? `/api/admin/modules/${editing.id}` : "/api/admin/modules",
         {
           method: editing ? "PATCH" : "POST",

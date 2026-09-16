@@ -9,6 +9,7 @@ import { ModuleFormDialog } from "@/components/admin/module-form-dialog";
 import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import { tintStyles } from "@/components/shared/tint";
 import type { ModuleRecord } from "@/services/modules_ops";
+import { apiFetch } from "@/lib/auth/fetchApi";
 
 export function ModulesTable({ modules }: { modules: ModuleRecord[] }) {
   const router = useRouter();
@@ -35,7 +36,7 @@ export function ModulesTable({ modules }: { modules: ModuleRecord[] }) {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/modules/${deleteTarget.id}`, { method: "DELETE" });
+      const res = await apiFetch(`/api/admin/modules/${deleteTarget.id}`, { method: "DELETE" });
       if (res.ok) {
         setDeleteTarget(null);
         router.refresh();

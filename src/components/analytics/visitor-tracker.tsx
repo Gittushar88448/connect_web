@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { apiFetch } from "@/lib/auth/fetchApi";
 
 const COOKIE_NAME = "chub_vid";
 const HEARTBEAT_INTERVAL_MS = 15_000;
@@ -64,7 +65,7 @@ export function VisitorTracker() {
           new Blob([payload], { type: "application/json" })
         );
       } else {
-        fetch("/api/analytics/heartbeat", {
+        apiFetch("/api/analytics/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: payload,
