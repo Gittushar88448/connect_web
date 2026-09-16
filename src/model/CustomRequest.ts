@@ -1,124 +1,29 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
-export enum CustomRequestStatus {
-  SUBMITTED = "submitted",
-  REVIEWING = "reviewing",
-  QUOTED = "quoted",
-  APPROVED = "approved",
-  IN_PROGRESS = "in_progress",
-  COMPLETED = "completed",
-  REJECTED = "rejected",
-  CANCELLED = "cancelled",
-}
-
-export interface ICustomIoTRequest extends Document {
-  customer: Types.ObjectId;
-
-  projectTitle: string;
-
-  industry?: string;
-
-  problemDescription: string;
-
-  deviceRequirements?: string;
-
-  connectivityRequirements?: string;
-
-  expectedQuantity?: number;
-
-  budgetRange?: string;
-
-  expectedTimeline?: string;
-
-  additionalRequirements?: string;
-
-  attachments: string[];
-
-  status: CustomRequestStatus;
-
-  adminNotes?: string;
-
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const customIoTRequestSchema = new Schema<ICustomIoTRequest>(
+const CustomSolutionRequestSchema = new Schema(
   {
-    customer: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      index: true,
-    },
-
-    projectTitle: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 150,
-    },
-
-    industry: {
-      type: String,
-      trim: true,
-    },
-
-    problemDescription: {
-      type: String,
-      required: true,
-    },
-
-    deviceRequirements: {
-      type: String,
-    },
-
-    connectivityRequirements: {
-      type: String,
-    },
-
-    expectedQuantity: {
-      type: Number,
-      min: 1,
-    },
-
-    budgetRange: {
-      type: String,
-    },
-
-    expectedTimeline: {
-      type: String,
-    },
-
-    additionalRequirements: {
-      type: String,
-    },
-
-    attachments: {
-      type: [String],
-      default: [],
-    },
-
+    contactName: { type: String, required: true, trim: true },
+    contactEmail: { type: String, required: true, trim: true, lowercase: true },
+    projectTitle: { type: String, required: true, trim: true },
+    industry: { type: String, required: true, trim: true },
+    problemDescription: { type: String, required: true, trim: true },
+    technicalRequirements: { type: String, required: true, trim: true },
+    integrationRequirements: { type: [String], required: true, default: [] },
+    expectedScale: { type: String, required: true, trim: true },
+    budgetRange: { type: String, required: true, trim: true },
+    timeline: { type: String, required: true, trim: true },
+    additionalRequirements: { type: String, trim: true, default: "" },
     status: {
       type: String,
-      enum: Object.values(CustomRequestStatus),
-      default: CustomRequestStatus.SUBMITTED,
-      index: true,
+      required: true,
+      enum: ["pending", "accepted", "rejected", "appointment_booked"],
+      default: "pending",
     },
-
-    adminNotes: {
-      type: String,
-    },
+    appointmentAt: { type: Date, default: null },
+    adminNote: { type: String, trim: true, default: "" },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const CustomIoTRequestModel =
-  (mongoose.models.CustomIoTRequest as mongoose.Model<ICustomIoTRequest>) ||
-  mongoose.model<ICustomIoTRequest>(
-    "CustomIoTRequest",
-    customIoTRequestSchema
-  );
-
-export default CustomIoTRequestModel;
+export const CustomSolutionRequestModel =
+  models.CustomSolutionRequest || model("CustomSolutionRequest", CustomSolutionRequestSchema);
