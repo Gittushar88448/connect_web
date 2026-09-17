@@ -41,7 +41,7 @@ function serialize(doc: IUser): UserRecord {
 
     gender: doc.gender,
 
-    dob: doc.dob.toISOString(),
+    dob: doc.dob?.toISOString() || "",
 
     coinBalance: doc.coinBalance ?? 0,
 
@@ -69,7 +69,7 @@ export async function listUsers(): Promise<UserRecord[]> {
       .find({})
       .sort({ createdAt: -1 })
       .lean();
-
+    
     return docs.map((doc) =>
       serialize(doc as unknown as IUser)
     );
