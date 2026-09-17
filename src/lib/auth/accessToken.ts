@@ -12,6 +12,7 @@ if (!secret) {
 export interface AccessTokenPayload {
   sub: string;
   account: Account;
+  type: number,
   iat?: number;
   exp?: number;
 }
@@ -22,10 +23,12 @@ const encodedSecret = new TextEncoder().encode(
 
 export async function createAccessToken(
   userId: string,
-  account: string
+  account: string,
+  type: number
 ) {
   return new SignJWT({
     account,
+    type
   })
     .setProtectedHeader({
       alg: "HS256",
@@ -46,18 +49,22 @@ export async function verifyAccessToken(
       encodedSecret
     );
 
+    const customPayload = payload as Record<string, any>;
+
     if (
-      typeof payload.sub !== "string" ||
-      typeof payload.account !== "string"
+      typeof customPayload.sub !== "string" ||
+      typeof customPayload.account !== "string"||
+      typeof customPayload.type !== "number"
     ) {
       return null;
     }
 
     return {
-      sub: payload.sub,
-      account: payload.account as Account,
-      iat: payload.iat,
-      exp: payload.exp,
+      sub: customPayload.sub,
+      account: customPayload.account as Account,
+      type: customPayload.type as number,
+      iat: customPayload.iat,
+      exp: customPayload.exp,
     };
     
   } catch {
