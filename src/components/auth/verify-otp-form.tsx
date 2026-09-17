@@ -16,6 +16,8 @@ export function VerifyOtpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
+  const firstName = searchParams.get("firstName") ?? "";
+  const lastName = searchParams.get("lastName") ?? "";
 
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -44,31 +46,34 @@ export function VerifyOtpForm() {
     
 // using use contxt api hook we get the data 
 
-    // try {
-    //   const response = await fetch('/api/auth/send-otp', {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //       email: values.email
-    //     })
-    //   });
+    try {
+      const response = await fetch('/api/auth/sign-up', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          otp: parsed.data.code,
+          firstName,
+          email,
+          lastName
+        })
+      });
 
-    //   const data = await response.json();
+      const data = await response.json();
 
-    //   if (!response.ok || !data.success) {
-    //     setError(data.message || "Failed to send OTP");
-    //     return;
-    //   }
+      if (!response.ok || !data.success) {
+        setError(data.message || "Failed to send OTP");
+        return;
+      }
 
-    // } catch (error) {
-    //   setError("Something went wrong. Please try again.");
-    // } finally {
-    //   setSubmitting(false);
-    // }
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
 
-    router.push("/login?verified=1");
+    router.push("/");
   }
 
   async function handleResend() {
