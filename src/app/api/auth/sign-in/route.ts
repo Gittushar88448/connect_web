@@ -123,7 +123,8 @@ export async function POST(req: Request) {
     const accessToken =
       await createAccessToken(
         user._id.toString(),
-        user.account
+        user.account,
+        user.type as number,
       );
 
     const refreshToken =
