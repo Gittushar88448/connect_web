@@ -11,7 +11,7 @@ import {
     hashRefreshToken,
     generateTokenFamily,
 } from "@/lib/auth/refreshToken";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "@/lib/auth/session";
+import { setAccessTokenCookie, setRefreshTokenCookie, setUserProfile } from "@/lib/auth/session";
 
 
 export async function POST(req: Request) {
@@ -22,12 +22,11 @@ export async function POST(req: Request) {
             email,
             firstName,
             lastName,
-            otp,
-            password,
+            otp
         } = await req.json();
 
 
-        if (!firstName || !email || !password || !otp) {
+        if (!firstName || !email || !otp) {
             return Response.json(
                 {
                     success: false,
@@ -44,8 +43,7 @@ export async function POST(req: Request) {
 
 
         const existingUser = await UserModel.findOne({
-            email: normalizedEmail,
-            is_deleted: false
+            email: normalizedEmail
         });
 
 
@@ -55,7 +53,7 @@ export async function POST(req: Request) {
                     success: false,
                     message: "User already exists, Please Sign in",
                 },
-                { status: 409 }
+                { status: 400 }
             );
         }
 
@@ -111,10 +109,6 @@ export async function POST(req: Request) {
 
 
         if (existingUser) {
-
-            existingUser.firstName = firstName;
-            existingUser.lastName = lastName;
-            existingUser.password = password;
             existingUser.is_verified = true;
             existingUser.userStatus = UserStatus.ACTIVE;
             existingUser.image = image;
@@ -127,7 +121,6 @@ export async function POST(req: Request) {
                 firstName,
                 lastName,
                 email: normalizedEmail,
-                password,
 
                 is_verified: true,
                 userStatus: UserStatus.ACTIVE,
@@ -147,7 +140,8 @@ export async function POST(req: Request) {
         const accessToken =
             await createAccessToken(
                 user._id.toString(),
-                user.account
+                user.account,
+                user.type as number
             );
 
         const refreshToken =
@@ -174,22 +168,22 @@ export async function POST(req: Request) {
 
         await setAccessTokenCookie(accessToken);
         await setRefreshTokenCookie(refreshToken);
-
+        await setUserProfile({
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            account: user.account,
+            userStatus: user.userStatus,
+            coinBalance:
+                user.coinBalance,
+            image: user.image,
+        });
         return Response.json(
             {
                 success: true,
                 message:
                     "Account created successfully. You are now logged in.",
-                user: {
-                    id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    account: user.account,
-                    userStatus: user.userStatus,
-                    coinBalance: user.coinBalance,
-                    image: user.image,
-                },
             },
             {
                 status: 201,
