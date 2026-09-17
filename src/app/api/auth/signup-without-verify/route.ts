@@ -41,10 +41,10 @@ export async function POST(req: Request) {
         if (existingUser) {
             return Response.json(
                 {
-                    success: false,
+                    success: true,
                     message: "User already exists, but not verified",
                 },
-                { status: 409 }
+                { status: 200 }
             );
         }
         const genSalt = await bcrypt.genSalt(10)
@@ -64,7 +64,6 @@ export async function POST(req: Request) {
                 success: true,
                 message:
                     "Account Initiated, You may Verify now.",
-                tempUserId: user._id
             },
             {
                 status: 201,
