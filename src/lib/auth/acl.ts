@@ -1,6 +1,6 @@
 // ACL routes to prevent access control for Protected Routes!!!
 
-import { Account } from "@/model/User";
+import { Account } from "@/types/user-enums";
 import {
   Permission,
 } from "./permissions";

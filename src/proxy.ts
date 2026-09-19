@@ -23,8 +23,8 @@ export async function proxy(
   }
 
   // Get access token
-    const accessToken =
-      request.cookies.get("accessToken")?.value;
+  const accessToken =
+    request.cookies.get("accessToken")?.value;
 
   if (!accessToken) {
     return NextResponse.json(
@@ -70,5 +70,5 @@ export async function proxy(
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/"],
 };

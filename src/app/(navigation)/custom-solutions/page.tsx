@@ -8,7 +8,7 @@ import { TechCapabilities } from "@/components/custom-solutions/tech-capabilitie
 import { RequestForm } from "@/components/custom-solutions/request-form";
 
 export const metadata: Metadata = {
-  title: "Custom IoT Solutions",
+  title: "Custom software Solutions",
   description:
     "Request a custom IoT hardware or software solution from Connect Hub's engineering team.",
 };

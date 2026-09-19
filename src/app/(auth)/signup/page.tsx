@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signupSchema } from "@/lib/validations/auth";
+import { useAuth } from "@/components/auth/authProvider";
 
 type FieldErrors = Partial<Record<"firstName" | "lastName" | "email" | "password" | "confirmPassword", string>>;
 
@@ -32,7 +33,7 @@ export default function SignupPage() {
       confirmPassword: String(formData.get("confirmPassword") ?? ""),
     };
 
-    if(values.password != values.confirmPassword){
+    if (values.password != values.confirmPassword) {
       setFormError("Password Must be Equal")
       return;
     }
@@ -52,20 +53,38 @@ export default function SignupPage() {
     setSubmitting(true);
 
     try {
-      const response = await fetch('/api/auth/send-otp', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: values.email
+      const visitorId = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("chub_vid="))
+        ?.split("=")[1];
+        
+      const [otpResponse, signupResponse] = await Promise.all([
+        fetch('/api/auth/send-otp', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: values.email })
+        }),
+        fetch('/api/auth/signup-without-verify', {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            ...(visitorId ? { "x-visitor-session": visitorId } : {}),
+          },
+          body: JSON.stringify({
+            email: parsed.data.email,
+            firstName: parsed.data.firstName,
+            lastName: parsed.data.lastName ?? "",
+            password: parsed.data.password
+          })
         })
-      });
+      ]);
 
-      const data = await response.json();
+      // Extract the response data from the OTP payload
+      const otpData = await otpResponse.json();
 
-      if (!response.ok || !data.success) {
-        setFormError(data.message || "Failed to send OTP");
+      // Validate if either network request failed, or if the OTP request was unsuccessful
+      if (!otpResponse.ok || !signupResponse.ok || !otpData.success) {
+        setFormError(otpData.message || "Failed to initiate registration process");
         return;
       }
 
@@ -76,7 +95,7 @@ export default function SignupPage() {
     }
 
     setSubmitting(false);
-    router.push(`/verify-otp?email=${encodeURIComponent(parsed.data.email)}`);
+    router.push(`/verify-otp?email=${encodeURIComponent(parsed.data.email)}&firstName=${parsed.data.firstName}&lastName=${parsed.data.lastName}`);
   }
 
   return (
