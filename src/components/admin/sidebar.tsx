@@ -43,8 +43,7 @@ export function AdminSidebar() {
 
       <div className="mt-auto border-t border-white/10 p-4">
         <p className="text-xs leading-relaxed text-white/40">
-          Admin dashboard — module management. Not yet gated by real
-          authentication; see lib/auth/require-admin.ts.
+          Admin dashboard
         </p>
       </div>
     </aside>
