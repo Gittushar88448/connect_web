@@ -117,6 +117,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             autoComplete="email"
             placeholder="you@company.com"
             aria-invalid={Boolean(errors.email)}
+            suppressHydrationWarning={true}
             className="border-white/15 bg-white/5 text-white placeholder:text-white/30 focus-visible:border-brand-signal-bright focus-visible:ring-brand-signal-bright/30"
           />
           {errors.email && <p className="text-xs text-red-300">{errors.email}</p>}
@@ -140,6 +141,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             type="password"
             autoComplete="current-password"
             aria-invalid={Boolean(errors.password)}
+            suppressHydrationWarning={true}
             className="border-white/15 bg-white/5 text-white placeholder:text-white/30 focus-visible:border-brand-signal-bright focus-visible:ring-brand-signal-bright/30"
           />
           {errors.password && <p className="text-xs text-red-300">{errors.password}</p>}
@@ -147,7 +149,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
         {formError && <p className="text-sm text-red-300">{formError}</p>}
 
-        <Button type="submit" size="lg" disabled={submitting} className="mt-2 h-11 text-sm">
+        <Button type="submit" size="lg" disabled={submitting} className="mt-2 h-11 text-sm" suppressHydrationWarning={true}>
           {submitting && <Loader2 className="animate-spin" />}
           {submitting ? "Logging in…" : "Log in"}
         </Button>
