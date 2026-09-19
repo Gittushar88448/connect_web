@@ -27,6 +27,14 @@ export async function deleteUserProfileFromCookie() {
     cookieStore.delete(ACCESS_USER_PROFILE);
 }
 
+export async function clearAccessTokenCookie() {
+    const cookieStore = await cookies();
+    if(cookieStore.has(ACCESS_TOKEN_COOKIE)){
+        cookieStore.delete(ACCESS_TOKEN_COOKIE);
+    }
+    return;
+}
+
 export async function getUserProfileFromCookie() {
 
     const cookieStore = await cookies();
