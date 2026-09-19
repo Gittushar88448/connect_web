@@ -15,6 +15,7 @@ import {
     getRefreshTokenCookie,
     setRefreshTokenCookie,
     clearRefreshTokenCookie,
+    setAccessTokenCookie,
 } from "@/lib/auth/session";
 
 import {
@@ -175,17 +176,18 @@ export async function POST() {
         const accessToken =
             await createAccessToken(
                 user._id.toString(),
-                user.account
+                user.account,
+                user.type as number
             );
 
         await setRefreshTokenCookie(
             newRefreshToken
         );
 
+        await setAccessTokenCookie(accessToken);
         return Response.json(
             {
-                success: true,
-                accessToken,
+                success: true
             },
             {
                 status: 200,
