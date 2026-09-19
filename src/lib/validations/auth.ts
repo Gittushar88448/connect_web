@@ -1,31 +1,35 @@
 import { z } from "zod";
 
-const email = z
+export const email = z
   .string()
   .trim()
   .toLowerCase()
   .pipe(z.email("Enter a valid email address"));
 
-const password = z
+export const password = z
   .string()
   .min(8, "Use at least 8 characters")
   .regex(/[A-Z]/, "Include at least one uppercase letter")
   .regex(/[0-9]/, "Include at least one number");
 
-export const signupSchema = z
-  .object({
-    firstName: z.string().trim().min(1, "First name is required"),
-    lastName: z.string().trim().min(1, "Last name is required"),
-    email,
-    password,
-    confirmPassword: z.string(),
-  })
+const baseSignupFields = z.object({
+  firstName: z.string().trim().min(1, "First name is required"),
+  lastName: z.string().trim().min(1, "Last name is required"),
+  email,
+  password,
+});
+
+export const signupSchema = baseSignupFields
+  .extend({ confirmPassword: z.string() })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 
 export type SignupInput = z.infer<typeof signupSchema>;
+
+export const signupApiSchema = baseSignupFields;
+export type SignupApiInput = z.infer<typeof signupApiSchema>;
 
 export const loginSchema = z.object({
   email,
