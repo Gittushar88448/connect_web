@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
-import { Account } from "@/model/User";
+import { Account } from "@/types/user-enums";
 
 const secret = process.env.JWT_ACCESS_SECRET;
 
