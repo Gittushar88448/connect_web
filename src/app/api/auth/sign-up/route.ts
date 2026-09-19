@@ -184,6 +184,17 @@ export async function POST(req: Request) {
                 success: true,
                 message:
                     "Account created successfully. You are now logged in.",
+                user: {
+                    id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    account: user.account,
+                    userStatus: user.userStatus,
+                    coinBalance:
+                        user.coinBalance,
+                    image: user.image,
+                }
             },
             {
                 status: 201,
