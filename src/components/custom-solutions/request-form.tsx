@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Loader2, Paperclip, Send } from "lucide-react";
+import { CheckCircle2, Loader2, Paperclip, Send, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ type Values = {
   budgetRange: string;
   timeline: string;
   additionalRequirements: string;
+  attachments: object[];
 };
 
 const initialValues: Values = {
@@ -42,6 +43,7 @@ const initialValues: Values = {
   budgetRange: "",
   timeline: "",
   additionalRequirements: "",
+  attachments: []
 };
 
 type FieldErrors = Partial<Record<keyof Values, string>>;
@@ -55,6 +57,25 @@ export function RequestForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submittedTitle, setSubmittedTitle] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+
+  // Handle file selection
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+
+      setFiles((prev) => ({
+        ...prev,
+        attachments: selectedFiles,
+      }));
+    }
+  };
+
+  // Remove a specific file from selection
+  const removeFile = (indexToRemove: number) => {
+    setFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
 
   function update<K extends keyof Values>(key: K, value: Values[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -71,7 +92,6 @@ export function RequestForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     const parsed = customSolutionSchema.safeParse(values);
     if (!parsed.success) {
       const nextErrors: FieldErrors = {};
@@ -89,6 +109,10 @@ export function RequestForm() {
       return;
     }
 
+    const payload = {
+      ...parsed.data,
+      files
+    }
     setErrors({});
     setSubmitting(true);
     setSubmitError(null);
@@ -98,7 +122,7 @@ export function RequestForm() {
       const res = await fetch("/api/custom-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -322,8 +346,37 @@ export function RequestForm() {
         <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-3.5 py-3 text-sm text-muted-foreground hover:border-primary/40">
           <Paperclip className="size-4" aria-hidden="true" />
           Attach specs, wireframes, or reference documents
-          <input type="file" multiple className="sr-only" />
+
+          <input
+            type="file"
+            multiple
+            accept=".pdf,.txt,text/plain,application/pdf" // Restricts selections to PDF and Text
+            className="sr-only"
+            onChange={handleFileChange}
+          />
         </label>
+
+        {files.length > 0 && (
+          <ul className="mt-2 divide-y divide-border rounded-md border border-border bg-muted/20 text-xs">
+            {files.map((file, index) => (
+              <li key={index} className="flex items-center justify-between p-2">
+                <span className="truncate font-medium text-foreground max-w-[80%]">
+                  {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                </span>
+                <button
+                  type="button"
+
+                  onClick={() => removeFile(index)}
+                  className="text-muted-foreground hover:text-destructive"
+
+                >
+                  <X className="size-3" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
       </div>
 
       {submitError && <p className="text-sm text-destructive">{submitError}</p>}
