@@ -9,6 +9,7 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { OtpInput } from "@/components/auth/otp-input";
 import { Button } from "@/components/ui/button";
 import { otpSchema } from "@/lib/validations/auth";
+import { useAuth } from "./authProvider";
 
 const RESEND_SECONDS = 30;
 
@@ -24,6 +25,7 @@ export function VerifyOtpForm() {
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
+  const { setUser } = useAuth()
 
   useEffect(() => {
     if (secondsLeft <= 0) return;
@@ -43,8 +45,8 @@ export function VerifyOtpForm() {
 
     setError(null);
     setSubmitting(true);
-    
-// using use contxt api hook we get the data 
+
+    // using use contxt api hook we get the data 
 
     try {
       const response = await fetch('/api/auth/sign-up', {
@@ -67,19 +69,19 @@ export function VerifyOtpForm() {
         return;
       }
 
+      setUser(data?.user);
+      router.push("/");
     } catch (error) {
       setError("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
-
-    router.push("/");
   }
 
   async function handleResend() {
-    try{
-    setResending(true);
-     const response = await fetch('/api/auth/send-otp', {
+    try {
+      setResending(true);
+      const response = await fetch('/api/auth/send-otp', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -98,7 +100,7 @@ export function VerifyOtpForm() {
 
     } catch (error) {
       setError("Something went wrong. Please try again.");
-    }finally{
+    } finally {
       setResending(false);
     }
     setSecondsLeft(RESEND_SECONDS);
@@ -141,7 +143,7 @@ export function VerifyOtpForm() {
             </span>
           ) : (
             <button
-              type="button" 
+              type="button"
               onClick={handleResend}
               disabled={resending}
               className="font-medium text-brand-signal-bright hover:underline disabled:opacity-50"
