@@ -1,8 +1,8 @@
 import "server-only";
 
-import  dbConnect from "@/lib/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 import { CustomSolutionRequestModel } from "@/model/CustomRequest";
-import type { CustomSolutionFormValues } from "@/lib/validations/custom-solutions";
+import { customSolutionSchema, type CustomSolutionFormValues } from "@/lib/validations/custom-solutions";
 
 export interface CustomRequestRecord extends CustomSolutionFormValues {
   id: string;
@@ -28,6 +28,9 @@ function serialize(doc: Record<string, unknown>): CustomRequestRecord {
     timeline: doc.timeline as string,
     additionalRequirements: (doc.additionalRequirements as string) ?? "",
     status: doc.status as CustomRequestRecord["status"],
+    attachments: Array.isArray(doc.attachments)
+      ? (doc.attachments)
+      : [],
     appointmentAt: doc.appointmentAt ? new Date(doc.appointmentAt as string).toISOString() : null,
     adminNote: (doc.adminNote as string) ?? "",
     createdAt: new Date(doc.createdAt as string).toISOString(),
