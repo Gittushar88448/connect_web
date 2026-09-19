@@ -21,6 +21,13 @@ const CustomSolutionRequestSchema = new Schema(
     },
     appointmentAt: { type: Date, default: null },
     adminNote: { type: String, trim: true, default: "" },
+    attachments: [
+    {
+      fileName: { type: String, required: true },
+      fileUrl: { type: String, required: true },
+      uploadedAt: { type: Date, default: Date.now }
+    }
+  ]
   },
   { timestamps: true }
 );
