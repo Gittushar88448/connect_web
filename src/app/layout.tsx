@@ -3,6 +3,7 @@ import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cookies } from "next/headers";
 import { AuthProvider } from "@/components/auth/authProvider";
+import { ACCESS_TOKEN_COOKIE, ACCESS_USER_PROFILE, REFRESH_TOKEN_COOKIE } from "@/lib/auth/constants";
 
 
 const displayFont = Space_Grotesk({
@@ -40,24 +41,39 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const cookieStore = await cookies();
 
-  const userCookie = cookieStore.get("user_profile")?.value;
-  let initialUser = null;
-  if (userCookie) {
-    try {
-      initialUser = JSON.parse(userCookie);
+  const accessToken =
+    cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
 
-    } catch (error) {
-      console.error("Failed to parse user_profile cookie:", error);
+  const refreshToken =
+    cookieStore.get(REFRESH_TOKEN_COOKIE)?.value;
+
+  const userProfileCookie =
+    cookieStore.get(ACCESS_USER_PROFILE)?.value;
+
+  let initialUser = null;
+
+  if (userProfileCookie) {
+    try {
+      initialUser = JSON.parse(
+        userProfileCookie
+      );
+    } catch {
+      initialUser = null;
     }
   }
 
+  const hasSession =
+    !!accessToken ||
+    !!refreshToken &&
+    !!initialUser;
+
   return (
-    <html
-      lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} ${dataFont.variable} ${spaceGrotesk.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <AuthProvider initialUser={initialUser}>
+    <html lang="en">
+      <body>
+        <AuthProvider
+          initialUser={hasSession ? initialUser : null}
+          initialHasSession={hasSession}
+        >
           {children}
         </AuthProvider>
       </body>
