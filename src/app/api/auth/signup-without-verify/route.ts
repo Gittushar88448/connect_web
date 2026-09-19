@@ -47,14 +47,12 @@ export async function POST(req: Request) {
                 { status: 200 }
             );
         }
-        const genSalt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, genSalt);
 
         const user = await UserModel.create({
             firstName,
             lastName,
             email: normalizedEmail,
-            password: hashedPassword,
+            password,
             is_verified: false,
             userStatus: UserStatus.PENDING
         });
