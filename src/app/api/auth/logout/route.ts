@@ -5,6 +5,7 @@ import {
   getRefreshTokenCookie,
   clearRefreshTokenCookie,
   deleteUserProfileFromCookie,
+  clearAccessTokenCookie,
 } from "@/lib/auth/session";
 
 import {
@@ -38,6 +39,7 @@ export async function POST() {
     }
 
     await clearRefreshTokenCookie();
+    await clearAccessTokenCookie();
     await deleteUserProfileFromCookie();
     
     return Response.json({
