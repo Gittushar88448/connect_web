@@ -16,6 +16,11 @@ export const customSolutionSchema = z.object({
   timeline: z.string().min(1, "Select a timeline"),
   additionalRequirements: z.string().trim().optional(),
   contactName: z.string().trim().min(1, "Your name is required"),
+  attachments: z.array(z.object({
+    fileName: z.string().min(1, "File name is required"),
+    fileUrl: z.string().url("Invalid file URL"),
+    uploadedAt: z.date().default(() => new Date()),
+  })),
   contactEmail: z
     .string()
     .trim()
