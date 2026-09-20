@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
-import { Account } from "@/types/user-enums";
+import { Account } from "@/model/User";
 
 const secret = process.env.JWT_ACCESS_SECRET;
 
@@ -22,18 +22,15 @@ const encodedSecret = new TextEncoder().encode(
 );
 
 export async function createAccessToken(
-  userId: string,
-  account: string,
-  type: number
-) {
+payload: AccessTokenPayload
+): Promise<string> {
   return new SignJWT({
-    account,
-    type
+account: payload.account, type: payload.type
   })
     .setProtectedHeader({
       alg: "HS256",
     })
-    .setSubject(userId)
+    .setSubject(payload.sub)
     .setIssuedAt()
     .setExpirationTime("10m")
     .sign(encodedSecret);

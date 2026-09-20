@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signupSchema } from "@/lib/validations/auth";
-import { useAuth } from "@/components/auth/authProvider";
+import { GoogleButton } from "@/components/auth/google-button";
 
 type FieldErrors = Partial<Record<"firstName" | "lastName" | "email" | "password" | "confirmPassword", string>>;
 
@@ -57,7 +57,7 @@ export default function SignupPage() {
         .split("; ")
         .find((row) => row.startsWith("chub_vid="))
         ?.split("=")[1];
-        
+
       const [otpResponse, signupResponse] = await Promise.all([
         fetch('/api/auth/send-otp', {
           method: "POST",
@@ -66,7 +66,7 @@ export default function SignupPage() {
         }),
         fetch('/api/auth/signup-without-verify', {
           method: "POST",
-          headers: { 
+          headers: {
             "Content-Type": "application/json",
             ...(visitorId ? { "x-visitor-session": visitorId } : {}),
           },
@@ -112,6 +112,14 @@ export default function SignupPage() {
         </>
       }
     >
+      <GoogleButton label="Sign up with Google" />
+
+      <div className="my-5 flex items-center gap-3 text-xs text-white/40">
+        <span className="h-px flex-1 bg-white/10" />
+        or sign up with email
+        <span className="h-px flex-1 bg-white/10" />
+      </div>
+
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">

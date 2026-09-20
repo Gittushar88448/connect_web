@@ -8,6 +8,7 @@ import { ChevronDown, LogOut, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mainNav } from "@/constants/nav";
 import { useAuth } from "../auth/authProvider";
+import { redirect } from "next/navigation";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -21,8 +22,6 @@ export function Navbar() {
     logout,
   } = useAuth();
 
-  console.log("isauth", isAuthenticated)
-  console.log("user", user)
   useEffect(() => {
     if (!profileOpen) return;
 
@@ -69,6 +68,7 @@ export function Navbar() {
 
     setProfileOpen(false);
     setOpen(false);
+    redirect('/');
   }
 
   return (
@@ -110,7 +110,7 @@ export function Navbar() {
                 onClick={() =>
                   setProfileOpen((prev) => !prev)
                 }
-                className="flex items-center gap-2 rounded-full p-1 pr-2 text-white transition hover:bg-white/10 sm:pr-3"
+                className="flex items-center gap-2 rounded-full p-1 pr-2 text-white transition hover:bg-white/10 sm:pr-3 cursor-pointer"
                 aria-expanded={profileOpen}
                 aria-haspopup="menu"
               >
@@ -201,7 +201,7 @@ export function Navbar() {
                     {/* Menu items */}
                     <div className="p-2">
 
-                      {/* My Profile */}
+                      {/* My Profile page - still to make */}
                       <Link
                         href="/account"
                         onClick={() =>
@@ -211,7 +211,7 @@ export function Navbar() {
                           group flex items-center gap-3
                           rounded-xl px-3 py-2.5
                           text-sm text-white/75
-                          transition-all duration-150
+                          transition-all duration-150 cursor-pointer
                           hover:bg-white/8
                           hover:text-white
                           focus:outline-none
@@ -246,7 +246,7 @@ export function Navbar() {
                         type="button"
                         onClick={handleLogout}
                         className="
-                          group flex w-full
+                          group flex w-full cursor-pointer
                           items-center gap-3
                           rounded-xl px-3 py-2.5
                           text-sm text-red-400/80
@@ -291,7 +291,7 @@ export function Navbar() {
               nativeButton={false}
               aria-label="Sign in"
               render={<Link href="/login" />}
-              className="hidden text-white/80 hover:bg-white/10 hover:text-white sm:inline-flex"
+              className="hidden text-white/80 hover:bg-white/10 hover:text-white sm:inline-flex cursor-pointer"
             >
               <User />
             </Button>

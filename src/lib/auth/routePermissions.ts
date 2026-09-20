@@ -1,139 +1,56 @@
-import { Permission } from "./permissions";
+import type { Permission } from "./permissions";
 
-interface RoutePermission {
+interface RouteRule {
   method: string;
   pattern: RegExp;
   permission: Permission;
 }
 
-export const ROUTE_PERMISSIONS: RoutePermission[] = [
+// Order doesn't matter for correctness here — every pattern is fully
+// anchored (^...$) and scoped to an exact segment count, so e.g. the
+// single-id modules rule can't accidentally match a nested users/[id]/role
+// path. Kept grouped by resource for readability.
+const rules: RouteRule[] = [
+  // /api/admin/modules
+  { method: "GET", pattern: /^\/api\/admin\/modules$/, permission: "module:read" },
+  { method: "POST", pattern: /^\/api\/admin\/modules$/, permission: "module:create" },
+  { method: "PATCH", pattern: /^\/api\/admin\/modules\/[^/]+$/, permission: "module:update" },
+  { method: "DELETE", pattern: /^\/api\/admin\/modules\/[^/]+$/, permission: "module:delete" },
 
-
+  // /api/admin/custom-requests
   {
     method: "GET",
-    pattern: /^\/api\/products$/,
-    permission: "product:read",
+    pattern: /^\/api\/admin\/custom-requests$/,
+    permission: "customRequest:read",
+  },
+  {
+    method: "PATCH",
+    pattern: /^\/api\/admin\/custom-requests\/[^/]+$/,
+    permission: "customRequest:update",
   },
 
+  // /api/admin/users — superadmin-only surface (see lib/auth/acl.ts)
+  { method: "GET", pattern: /^\/api\/admin\/users$/, permission: "user:read" },
+  { method: "POST", pattern: /^\/api\/admin\/users$/, permission: "user:create" },
+  { method: "PATCH", pattern: /^\/api\/admin\/users\/[^/]+$/, permission: "user:update" },
   {
-    method: "POST",
-    pattern: /^\/api\/products$/,
-    permission: "product:create",
+    method: "PATCH",
+    pattern: /^\/api\/admin\/users\/[^/]+\/role$/,
+    permission: "user:manageRole",
   },
-
   {
-    method: "POST",
-    pattern: /^\/api\/products\/[^/]+$/,
-    permission: "product:update",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/products\/[^/]+$/,
-    permission: "product:delete",
-  },
-
-
-  // =========================
-  // ORDERS
-  // =========================
-
-  {
-    method: "GET",
-    pattern: /^\/api\/orders$/,
-    permission: "order:read",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/orders$/,
-    permission: "order:create",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/orders\/[^/]+$/,
-    permission: "order:update",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/orders\/[^/]+$/,
-    permission: "order:cancel",
-  },
-
-
-  // =========================
-  // COUPONS
-  // =========================
-
-  {
-    method: "POST",
-    pattern: /^\/api\/coupons$/,
-    permission: "coupon:create",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/coupons\/[^/]+$/,
-    permission: "coupon:update",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/coupons\/[^/]+$/,
-    permission: "coupon:delete",
-  },
-
-
-  // =========================
-  // USERS
-  // =========================
-
-  {
-    method: "GET",
-    pattern: /^\/api\/users$/,
-    permission: "user:read",
-  },
-
-  {
-    method: "POST",
-    pattern: /^\/api\/users\/[^/]+$/,
+    method: "PATCH",
+    pattern: /^\/api\/admin\/users\/[^/]+\/status$/,
     permission: "user:update",
-  },
-
-
-  // =========================
-  // REPORTS
-  // =========================
-
-  {
-    method: "GET",
-    pattern: /^\/api\/reports$/,
-    permission: "report:read",
-  },
-
-
-  // =========================
-  // ADMIN
-  // =========================
-
-  {
-    method: "GET",
-    pattern: /^\/api\/admin(?:\/.*)?$/,
-    permission: "admin:manage",
   },
 ];
 
-export function getRequiredPermission(
-  method: string,
-  pathname: string
-): Permission | null {
-  const route = ROUTE_PERMISSIONS.find(
-    (route) =>
-      route.method === method &&
-      route.pattern.test(pathname)
-  );
-
-  return route?.permission ?? null;
+/**
+ * Returns the permission a request needs, or null if this route isn't
+ * governed by the ACL (e.g. anything outside /api/admin/*, which is all
+ * the middleware's config.matcher lets through to this function anyway).
+ */
+export function getRequiredPermission(method: string, pathname: string): Permission | null {
+  const rule = rules.find((r) => r.method === method && r.pattern.test(pathname));
+  return rule ? rule.permission : null;
 }

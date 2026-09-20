@@ -138,11 +138,11 @@ export async function POST(req: Request) {
         );
 
         const accessToken =
-            await createAccessToken(
-                user._id.toString(),
-                user.account,
-                user.type as number
-            );
+            await createAccessToken({
+                sub: user._id.toString(),
+                account: user.account,
+                type: user.type as number,
+            });
 
         const refreshToken =
             generateRefreshToken();
@@ -169,14 +169,10 @@ export async function POST(req: Request) {
         await setAccessTokenCookie(accessToken);
         await setRefreshTokenCookie(refreshToken);
         await setUserProfile({
-            id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
             account: user.account,
-            userStatus: user.userStatus,
-            coinBalance:
-                user.coinBalance,
             image: user.image,
         });
         return Response.json(

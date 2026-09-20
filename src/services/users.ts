@@ -1,10 +1,11 @@
 import "server-only";
 
 import UserModel, { Account, Gender, UserStatus } from "@/model/User";
-import type { SignupApiInput } from "@/lib/validations/auth";
+import crypto from "crypto";
 import type { AdminCreateUserInput, AdminUpdateUserInput } from "@/lib/validations/admin-user";
 import dbConnect from "@/lib/dbConnect";
 import mongoose from "mongoose";
+import type { GoogleProfile } from "@/lib/auth/google";
 
 export interface UserRecord {
   id: string;
@@ -154,6 +155,32 @@ export async function updateUserStatus(
     { new: true, runValidators: true }
   ).lean();
   return doc ? serialize(doc) : null;
+}
+
+export async function findOrCreateGoogleUser(profile: GoogleProfile): Promise<UserRecord> {
+  await dbConnect();
+
+  const existing = await UserModel.findOne({
+    email: profile.email,
+    is_deleted: { $ne: true },
+  }).lean();
+  if (existing) {
+    return serialize(existing);
+  }
+
+  const randomPassword = crypto.randomBytes(32).toString("hex");
+  const doc = await UserModel.create({
+    firstName: profile.firstName || profile.email.split("@")[0],
+    lastName: profile.lastName,
+    email: profile.email,
+    password: randomPassword,
+    account: Account.CUSTOMER,
+    type: 2,
+    is_verified: profile.emailVerified,
+    image: profile.picture,
+    userStatus: UserStatus.ACTIVE,
+  });
+  return serialize(doc.toObject());
 }
 
 export async function listUsers(): Promise<UserRecord[]> {

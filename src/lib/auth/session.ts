@@ -4,8 +4,12 @@ import {
     ACCESS_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
     ACCESS_USER_PROFILE,
+    OAUTH_STATE_COOKIE,
     REFRESH_TOKEN_EXPIRES_IN_DAYS,
 } from "./constants";
+
+const ACCESS_MAX_AGE = 15 * 60; // 15 minutes, matches the access token TTL
+const REFRESH_MAX_AGE = 30 * 24 * 60 * 60; // 30 days, matches the refresh token TTL
 
 export async function setUserProfile(user: object) {
     const cookieStore = await cookies();
@@ -103,4 +107,46 @@ export async function getRefreshTokenCookie() {
     return cookieStore.get(
         REFRESH_TOKEN_COOKIE
     )?.value;
+}
+
+export async function setAuthCookies(accessToken: string, refreshToken: string) {
+  const store = await cookies();
+  const common = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+  };
+  store.set(ACCESS_TOKEN_COOKIE, accessToken, { ...common, maxAge: ACCESS_MAX_AGE });
+  store.set(REFRESH_TOKEN_COOKIE, refreshToken, { ...common, maxAge: REFRESH_MAX_AGE });
+}
+
+export async function clearAuthCookies() {
+  const store = await cookies();
+  store.delete(ACCESS_TOKEN_COOKIE);
+  store.delete(REFRESH_TOKEN_COOKIE);
+}
+
+export async function getAccessTokenCookie(): Promise<string | undefined> {
+  const store = await cookies();
+  return store.get(ACCESS_TOKEN_COOKIE)?.value;
+}
+
+/** Short-lived CSRF-protection cookie for the Google OAuth redirect round trip. */
+export async function setOAuthStateCookie(state: string) {
+  const store = await cookies();
+  store.set(OAUTH_STATE_COOKIE, state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 10 * 60, // 10 minutes — long enough for the consent screen, no longer
+  });
+}
+
+export async function consumeOAuthStateCookie(): Promise<string | undefined> {
+  const store = await cookies();
+  const value = store.get(OAUTH_STATE_COOKIE)?.value;
+  store.delete(OAUTH_STATE_COOKIE);
+  return value;
 }

@@ -65,7 +65,7 @@ export async function POST() {
             );
         }
 
-        
+
         if (storedToken.revokedAt) {
             await RefreshTokenModel.updateMany(
                 {
@@ -174,11 +174,11 @@ export async function POST() {
 
 
         const accessToken =
-            await createAccessToken(
-                user._id.toString(),
-                user.account,
-                user.type as number
-            );
+            await createAccessToken({
+                sub: user._id.toString(),
+                account: user.account,
+                type: user.type as number,
+            });
 
         await setRefreshTokenCookie(
             newRefreshToken
