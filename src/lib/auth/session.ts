@@ -3,33 +3,13 @@ import { cookies } from "next/headers";
 import {
     ACCESS_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
-    ACCESS_USER_PROFILE,
     OAUTH_STATE_COOKIE,
     REFRESH_TOKEN_EXPIRES_IN_DAYS,
 } from "./constants";
 
-const ACCESS_MAX_AGE = 15 * 60; // 15 minutes, matches the access token TTL
+const ACCESS_MAX_AGE = 10 * 60; // 10 minutes, matches the access token TTL
 const REFRESH_MAX_AGE = 30 * 24 * 60 * 60; // 30 days, matches the refresh token TTL
 
-export async function setUserProfile(user: object) {
-    const cookieStore = await cookies();
-    cookieStore.set(ACCESS_USER_PROFILE, JSON.stringify(user), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge:
-            REFRESH_TOKEN_EXPIRES_IN_DAYS *
-            24 *
-            60 *
-            60,
-    });
-}
-
-export async function deleteUserProfileFromCookie() {
-    const cookieStore = await cookies();
-    cookieStore.delete(ACCESS_USER_PROFILE);
-}
 
 export async function clearAccessTokenCookie() {
     const cookieStore = await cookies();
@@ -37,14 +17,6 @@ export async function clearAccessTokenCookie() {
         cookieStore.delete(ACCESS_TOKEN_COOKIE);
     }
     return;
-}
-
-export async function getUserProfileFromCookie() {
-
-    const cookieStore = await cookies();
-    return cookieStore.get(
-        ACCESS_USER_PROFILE
-    )?.value;
 }
 
 export async function setAccessTokenCookie(
@@ -62,7 +34,7 @@ export async function setAccessTokenCookie(
 
         path: "/",
         maxAge:
-            10 *
+            10*
             60,
     }
     );
