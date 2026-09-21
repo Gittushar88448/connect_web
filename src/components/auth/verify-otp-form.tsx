@@ -9,7 +9,7 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { OtpInput } from "@/components/auth/otp-input";
 import { Button } from "@/components/ui/button";
 import { otpSchema } from "@/lib/validations/auth";
-import { useAuth } from "./authProvider";
+import { useAuth } from "../../context/authProvider";
 
 const RESEND_SECONDS = 30;
 

@@ -126,7 +126,7 @@ export function RequestForm() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+        setSubmitError(data.error || (!data.success) ? data.message : `Something went wrong. Please try again.`);
         return;
       }
       setSubmittedTitle(parsed.data.projectTitle);

@@ -7,7 +7,7 @@ import { ChevronDown, LogOut, Menu, User, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { mainNav } from "@/constants/nav";
-import { useAuth } from "../auth/authProvider";
+import { useAuth } from "../../context/authProvider";
 import { redirect } from "next/navigation";
 
 export function Navbar() {
@@ -68,7 +68,7 @@ export function Navbar() {
 
     setProfileOpen(false);
     setOpen(false);
-    redirect('/');
+    redirect('/login');
   }
 
   return (
