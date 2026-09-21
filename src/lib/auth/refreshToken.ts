@@ -15,6 +15,6 @@ export function hashRefreshToken(
     .digest("hex");
 }
 
-export function generateTokenFamily() {
+export function generateTokenFamily(): string {
   return crypto.randomUUID();
 }

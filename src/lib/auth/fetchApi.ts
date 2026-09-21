@@ -4,7 +4,7 @@ type ApiFetchOptions = RequestInit & {
 
 let refreshPromise: Promise<boolean> | null = null;
 
-async function refreshAccessToken(): Promise<boolean> {
+export async function refreshAccessToken(): Promise<boolean> {
   if (refreshPromise) {
     return refreshPromise;
   }
@@ -23,10 +23,7 @@ async function refreshAccessToken(): Promise<boolean> {
         return false;
       }
 
-      /*
-       * Only the actual refresh operation
-       * dispatches this event.
-       */
+
       if (typeof window !== "undefined") {
         window.dispatchEvent(
           new Event("auth:token-refreshed")
@@ -58,41 +55,35 @@ export async function apiFetch(
     ...fetchOptions
   } = options;
 
-  const requestOptions: RequestInit = {
+  const response = await fetch(input, {
     ...fetchOptions,
     credentials: "include",
-  };
+  });
 
-  let response = await fetch(
-    input,
-    requestOptions
-  );
 
-  /*
-   * Normal response.
-   */
-  if (response.status !== 401 || !retry) {
+  if (response.status !== 401) {
     return response;
   }
 
-  /*
-   * Access token expired.
-   */
+  if (!retry) {
+    return response;
+  }
+
   const refreshed =
     await refreshAccessToken();
 
   if (!refreshed) {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new Event("auth:session-expired")
+      );
+    }
+
     return response;
   }
 
-  /*
-   * Retry original request with the new
-   * access-token cookie.
-   */
-  response = await fetch(
-    input,
-    requestOptions
-  );
-
-  return response;
+  return fetch(input, {
+    ...fetchOptions,
+    credentials: "include",
+  });
 }
