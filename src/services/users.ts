@@ -127,6 +127,17 @@ export async function updateUserDetails(
   return doc ? serialize(doc) : null;
 }
 
+export async function getUserById(id: string): Promise<UserRecord | null> {
+  try {
+    await dbConnect();
+    const doc = await UserModel.findOne({ _id: new mongoose.Types.ObjectId(id), is_deleted: { $ne: true } }).lean();
+    return doc ? serialize(doc) : null;
+  } catch (err) {
+    console.warn("[services/users] getUserById failed:", (err as Error).message);
+    return null;
+  }
+}
+
 /** The role-change dropdown — keeps `type` in sync with `account`. */
 export async function updateUserAccount(
   id: string,
