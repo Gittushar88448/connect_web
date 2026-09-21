@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contactSchema, contactTopics, type ContactInput } from "@/lib/validations/contact";
-import { useAuth } from "../auth/authProvider";
 
 type FieldErrors = Partial<Record<keyof ContactInput, string>>;
 

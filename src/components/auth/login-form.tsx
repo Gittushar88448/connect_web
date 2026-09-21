@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema } from "@/lib/validations/auth"
-import { useAuth } from "./authProvider";
+import { useAuth } from "../../context/authProvider";
 import { GoogleButton } from "@/components/auth/google-button";
 
 type FieldErrors = Partial<Record<"email" | "password", string>>;
