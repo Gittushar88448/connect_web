@@ -27,7 +27,7 @@ function RotatingWord() {
   }
 
   return (
-    <span className="relative inline-block h-[1.1em] min-w-[7.5ch] align-bottom overflow-hidden">
+    <span className="relative inline-block h-[1.1em] min-w-[8.0ch] align-bottom overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.span
           key={rotatingWords[index]}

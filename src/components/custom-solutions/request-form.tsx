@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2, Loader2, Paperclip, Send, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { CheckCircle2, Loader2, Paperclip, Send, X, Lock } from "lucide-react";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,8 @@ import {
   timelineOptions,
 } from "@/constants/services";
 import { customSolutionSchema } from "@/lib/validations/custom-solutions";
+import { apiFetch } from "@/lib/auth/fetchApi";
+import { useAuth } from "@/context/authProvider";
 
 type Values = {
   contactName: string;
@@ -28,7 +31,6 @@ type Values = {
   budgetRange: string;
   timeline: string;
   additionalRequirements: string;
-  attachments: object[];
 };
 
 const initialValues: Values = {
@@ -43,7 +45,6 @@ const initialValues: Values = {
   budgetRange: "",
   timeline: "",
   additionalRequirements: "",
-  attachments: []
 };
 
 type FieldErrors = Partial<Record<keyof Values, string>>;
@@ -51,109 +52,336 @@ type FieldErrors = Partial<Record<keyof Values, string>>;
 const selectClass =
   "focus-visible:ring-ring/40 h-11 w-full rounded-lg border border-border bg-card px-3.5 text-sm text-foreground outline-none focus-visible:border-primary focus-visible:ring-2";
 
+const MAX_FILES = 10;
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+const ALLOWED_FILE_TYPES = new Set([
+  "application/pdf",
+  "text/plain",
+  "text/csv",
+
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+]);
+
 export function RequestForm() {
+  const { status } = useAuth();
   const [values, setValues] = useState<Values>(initialValues);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submittedTitle, setSubmittedTitle] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
-
-  // Handle file selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-
-      setFiles((prev) => ({
-        ...prev,
-        attachments: selectedFiles,
-      }));
+  const [existingRequest, setExistingRequest] = useState<{
+    id: string;
+    projectTitle: string;
+    status: string;
+  } | null>(null);
+  const hasCheckedRequest = useRef(false);
+  const [checkingRequest, setCheckingRequest] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setExistingRequest(null);
+      setShowForm(true);
+      setCheckingRequest(false);
+      hasCheckedRequest.current = true;
+      return;
     }
+
+    if (hasCheckedRequest.current) {
+      return;
+    }
+
+    hasCheckedRequest.current = true;
+
+    async function checkExistingRequest() {
+      setCheckingRequest(true);
+      setSubmitError(null);
+
+      try {
+        const res = await apiFetch(
+          "/api/auth/get-custom-request",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(
+            data?.message ||
+            data?.error ||
+            "Failed to check existing request"
+          );
+        }
+
+        const request = data?.result ?? null;
+
+        if (request) {
+          setExistingRequest({
+            id: String(request.id),
+            projectTitle: request.projectTitle,
+            status: request.status,
+          });
+
+          setShowForm(false);
+        } else {
+          setExistingRequest(null);
+          setShowForm(true);
+        }
+      } catch (error) {
+        console.error(
+          "Failed to check existing custom request:",
+          error
+        );
+
+        setExistingRequest(null);
+        setShowForm(true);
+      } finally {
+        setCheckingRequest(false);
+      }
+    }
+
+    checkExistingRequest();
+  }, [status]);
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.files) return;
+
+    const selectedFiles = Array.from(e.target.files);
+
+    if (files.length + selectedFiles.length > MAX_FILES) {
+      setSubmitError(`You can attach a maximum of ${MAX_FILES} files.`);
+      e.target.value = "";
+      return;
+    }
+
+    const invalidFile = selectedFiles.find(
+      (file) =>
+        !ALLOWED_FILE_TYPES.has(file.type) ||
+        file.size > MAX_FILE_SIZE
+    );
+
+    if (invalidFile) {
+      setSubmitError(
+        `"${invalidFile.name}" is not supported or exceeds the 10 MB limit.`
+      );
+      e.target.value = "";
+      return;
+    }
+
+    setSubmitError(null);
+    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    // Allows selecting the same file again later.
+    e.target.value = "";
   };
 
-  // Remove a specific file from selection
   const removeFile = (indexToRemove: number) => {
-    setFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+    setFiles((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
   };
 
-
-  function update<K extends keyof Values>(key: K, value: Values[K]) {
-    setValues((prev) => ({ ...prev, [key]: value }));
+  function update<K extends keyof Values>(
+    key: K,
+    value: Values[K]
+  ) {
+    setValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   }
 
   function toggleIntegration(option: string) {
     setValues((prev) => ({
       ...prev,
-      integrationRequirements: prev.integrationRequirements.includes(option)
-        ? prev.integrationRequirements.filter((o) => o !== option)
-        : [...prev.integrationRequirements, option],
+      integrationRequirements:
+        prev.integrationRequirements.includes(option)
+          ? prev.integrationRequirements.filter(
+            (o) => o !== option
+          )
+          : [...prev.integrationRequirements, option],
     }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    setSubmitError(null);
+
     const parsed = customSolutionSchema.safeParse(values);
+
     if (!parsed.success) {
       const nextErrors: FieldErrors = {};
+
       for (const issue of parsed.error.issues) {
         const key = issue.path[0] as keyof Values;
-        if (key && !nextErrors[key]) nextErrors[key] = issue.message;
+
+        if (key && !nextErrors[key]) {
+          nextErrors[key] = issue.message;
+        }
       }
+
       setErrors(nextErrors);
+
       const firstKey = parsed.error.issues[0]?.path[0];
+
       if (firstKey) {
         document
           .getElementById(String(firstKey))
-          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
       }
+
       return;
     }
 
-    const payload = {
-      ...parsed.data,
-      files
-    }
     setErrors({});
     setSubmitting(true);
-    setSubmitError(null);
 
-    // adding apifetch here
     try {
-      const res = await fetch("/api/custom-requests", {
+      const formData = new FormData();
+
+      formData.append("contactName", parsed.data.contactName);
+      formData.append("contactEmail", parsed.data.contactEmail);
+      formData.append("projectTitle", parsed.data.projectTitle);
+      formData.append("industry", parsed.data.industry);
+      formData.append(
+        "problemDescription",
+        parsed.data.problemDescription
+      );
+      formData.append(
+        "technicalRequirements",
+        parsed.data.technicalRequirements
+      );
+      formData.append(
+        "integrationRequirements",
+        JSON.stringify(
+          parsed.data.integrationRequirements
+        )
+      );
+      formData.append(
+        "expectedScale",
+        parsed.data.expectedScale
+      );
+      formData.append(
+        "budgetRange",
+        parsed.data.budgetRange
+      );
+      formData.append("timeline", parsed.data.timeline);
+
+      formData.append(
+        "additionalRequirements",
+        parsed.data.additionalRequirements ?? ""
+      );
+      for (const file of files) {
+        formData.append("attachments", file);
+      }
+
+      const res = await apiFetch("/api/custom-requests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
+
+      const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setSubmitError(data.error || (!data.success) ? data.message : `Something went wrong. Please try again.`);
+        setSubmitError(
+          data.message ||
+          data.error ||
+          "Something went wrong. Please try again."
+        );
         return;
       }
-      setSubmittedTitle(parsed.data.projectTitle);
+
+      const createdRequest = data?.request;
+      if (!createdRequest) {
+        setSubmitError(
+          "Request was submitted, but the server did not return the request details."
+        );
+        return;
+      }
+
+      const nextRequest = {
+        id: String(createdRequest.id ?? createdRequest._id),
+        projectTitle: createdRequest.projectTitle,
+        status: createdRequest.status,
+      };
+
+      setExistingRequest(nextRequest);
+      setShowForm(false);
+
       setValues(initialValues);
+      setFiles([]);
+      setErrors({});
+
     } catch {
-      setSubmitError("Network error — check your connection and try again.");
+      setSubmitError(
+        "Network error — check your connection and try again."
+      );
     } finally {
       setSubmitting(false);
     }
   }
 
-  if (submittedTitle) {
+  if (checkingRequest) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card px-6 py-14 text-center">
-        <span className="flex size-12 items-center justify-center rounded-full bg-accent text-primary">
-          <CheckCircle2 className="size-6" aria-hidden="true" />
-        </span>
-        <h3 className="text-lg font-semibold text-foreground">
-          Request submitted
-        </h3>
-        <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-          Thanks — we&apos;ve received &ldquo;{submittedTitle}&rdquo;. A senior
-          engineer will follow up by email within 2 business days with next
-          steps.
+        <Loader2 className="size-6 animate-spin" />
+
+        <p className="text-sm text-muted-foreground">
+          Checking your previous requests...
         </p>
-        <Button variant="outline" className="mt-2" onClick={() => setSubmittedTitle(null)}>
-          Submit another request
+      </div>
+    );
+  }
+
+  if (existingRequest && !showForm) {
+    return (
+      <div className="flex flex-col items-center gap-4 rounded-2xl border border-border bg-card px-6 py-14 text-center">
+        <span className="flex size-12 items-center justify-center rounded-full bg-accent text-primary">
+          <CheckCircle2 className="size-6" />
+        </span>
+
+        <div>
+          <h3 className="text-lg font-semibold text-foreground">
+            Request already submitted
+          </h3>
+
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            You already submitted a request for{" "}
+            <span className="font-medium text-foreground">
+              &ldquo;{existingRequest.projectTitle}&rdquo;
+            </span>
+            .
+          </p>
+
+          <p className="mt-1 text-xs text-muted-foreground">
+            Status: {existingRequest.status}
+          </p>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-2"
+          onClick={() => setShowForm(true)}
+        >
+          Send another request
         </Button>
       </div>
     );
@@ -342,33 +570,56 @@ export function RequestForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Attachments (optional)</Label>
         <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-3.5 py-3 text-sm text-muted-foreground hover:border-primary/40">
-          <Paperclip className="size-4" aria-hidden="true" />
+          <Paperclip
+            className="size-4"
+            aria-hidden="true"
+          />
+
           Attach specs, wireframes, or reference documents
 
           <input
             type="file"
             multiple
-            accept=".pdf,.txt,text/plain,application/pdf" // Restricts selections to PDF and Text
+            accept={[
+              ".pdf",
+              ".txt",
+              ".csv",
+              ".doc",
+              ".docx",
+              ".xls",
+              ".xlsx",
+              ".ppt",
+              ".pptx",
+            ].join(",")}
             className="sr-only"
             onChange={handleFileChange}
           />
         </label>
 
+        <p className="text-xs text-muted-foreground">
+          PDF, Word, Excel, PowerPoint, TXT or CSV.
+          Maximum 10 files, 10 MB each.
+        </p>
+
         {files.length > 0 && (
           <ul className="mt-2 divide-y divide-border rounded-md border border-border bg-muted/20 text-xs">
             {files.map((file, index) => (
-              <li key={index} className="flex items-center justify-between p-2">
-                <span className="truncate font-medium text-foreground max-w-[80%]">
-                  {file.name} ({(file.size / 1024).toFixed(1)} KB)
+              <li
+                key={`${file.name}-${file.lastModified}-${index}`}
+                className="flex items-center justify-between p-2"
+              >
+                <span className="max-w-[80%] truncate font-medium text-foreground">
+                  {file.name} (
+                  {(file.size / 1024 / 1024).toFixed(2)}
+                  {" "}MB)
                 </span>
+
                 <button
                   type="button"
-
                   onClick={() => removeFile(index)}
                   className="text-muted-foreground hover:text-destructive"
-
+                  aria-label={`Remove ${file.name}`}
                 >
                   <X className="size-3" />
                 </button>
@@ -376,15 +627,40 @@ export function RequestForm() {
             ))}
           </ul>
         )}
-
       </div>
 
-      {submitError && <p className="text-sm text-destructive">{submitError}</p>}
+      {submitError && (
+        <p className="text-sm text-destructive">
+          {submitError}
+        </p>
+      )}
 
-      <Button type="submit" size="lg" disabled={submitting} className="h-11 self-start px-6 text-sm">
-        {submitting ? <Loader2 className="animate-spin" /> : <Send />}
-        {submitting ? "Submitting…" : "Submit request"}
-      </Button>
+      {status === "authenticated" ? (
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submitting}
+          className="h-11 self-start px-6 text-sm cursor-pointer"
+        >
+          {submitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <Send />
+          )}
+
+          {submitting ? "Submitting…" : "Submit request"}
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          size="lg"
+          className="h-11 self-start px-6 text-sm cursor-pointer"
+          onClick={() => router.push("/login")}
+        >
+          <Lock className="size-4" />
+          Sign in to submit
+        </Button>
+      )}
     </form>
   );
 }

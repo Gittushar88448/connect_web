@@ -56,7 +56,7 @@ const items: {
   },
 ];
 
-export function WhyConnectHub() {
+export function WhyKapsInfos() {
   return (
     <section className="relative overflow-hidden bg-accent/40 py-16 sm:py-20">
       <div

@@ -1,14 +1,32 @@
 import { z } from "zod";
 
 export const contactSchema = z.object({
-  name: z.string().trim().min(1, "Your name is required"),
-  email: z.string().trim().toLowerCase().pipe(z.email("Enter a valid email address")),
-  company: z.string().trim().optional(),
-  topic: z.string().min(1, "Select a topic"),
-  message: z.string().trim().min(10, "Add a bit more detail (at least 10 characters)"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Please enter your name")
+    .max(100, "Name is too long"),
+
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .pipe(z.email("Enter a valid email address")),
+
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Please enter a subject")
+    .max(150, "Subject is too long"),
+
+  message: z
+    .string()
+    .trim()
+    .min(10, "Please enter at least 10 characters")
+    .max(5000, "Message is too long"),
 });
 
-export type ContactInput = z.infer<typeof contactSchema>;
+export type ContactFormValues = z.infer<typeof contactSchema>;
 
 export const contactTopics = [
   "General inquiry",

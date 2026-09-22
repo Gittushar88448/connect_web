@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { apiFetch } from "@/lib/auth/fetchApi";
 
 const COOKIE_NAME = "chub_vid";
 const HEARTBEAT_INTERVAL_MS = 15_000;
@@ -21,13 +20,6 @@ function getOrCreateVisitorId(): string {
   return id;
 }
 
-/**
- * Mounted once in the root layout. Tracks anonymous time-on-site for the
- * admin "Users & Visitors" dashboard. Only accumulates time while the tab
- * is actually visible (Page Visibility API), so a forgotten background tab
- * doesn't inflate the numbers. Not tied to login — see the note on
- * app/admin/users/page.tsx about what this can and can't tell you.
- */
 export function VisitorTracker() {
   const pathname = usePathname();
   const accumulatedMs = useRef(0);
@@ -65,13 +57,13 @@ export function VisitorTracker() {
           new Blob([payload], { type: "application/json" })
         );
       } else {
-        apiFetch("/api/analytics/heartbeat", {
+        fetch("/api/analytics/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: payload,
           keepalive: true,
-        }).catch(() => {
-          // Analytics is best-effort; a failed ping shouldn't affect the page.
+        }).catch((err) => {
+          throw new Error(err);
         });
       }
     }

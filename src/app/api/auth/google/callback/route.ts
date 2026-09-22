@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { exchangeCodeForTokens, verifyGoogleIdToken } from "@/lib/auth/google";
-import { consumeOAuthStateCookie, setAuthCookies, setUserProfile } from "@/lib/auth/session";
+import { consumeOAuthStateCookie, setAuthCookies } from "@/lib/auth/session";
 import { findOrCreateGoogleUser } from "@/services/users";
 import { Account, UserStatus } from "@/types/user-enums";
 import { createAccessToken as signAccessToken } from "@/lib/auth/accessToken";
@@ -45,15 +45,6 @@ export async function GET(request: Request) {
       signRefreshToken(),
     ]);
     await setAuthCookies(accessToken, refreshToken);
-    await setUserProfile({
-        firstName: profile.firstName || profile.email.split("@")[0],
-        lastName: profile.lastName,
-        email: profile.email,
-        account: Account.CUSTOMER,
-        image: `https://api.dicebear.com/5.x/initials/svg?seed=${encodeURIComponent(
-                `${profile.firstName} ${profile.lastName ?? ""}`
-            )}`
-      })
     return NextResponse.redirect(new URL("/", request.url));
   } catch (err) {
     console.error("[api/auth/google/callback] failed:", err);

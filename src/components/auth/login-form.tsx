@@ -88,7 +88,7 @@ export function LoginForm() {
   return (
     <AuthShell
       eyebrow="Welcome back"
-      title="Log in to Connect Hub"
+      title="Log in to KapsInfos"
       description="Access your service requests, prebuilt modules, and account details."
       footer={
         <>

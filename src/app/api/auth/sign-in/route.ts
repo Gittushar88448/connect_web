@@ -20,8 +20,7 @@ import {
 
 import {
   setAccessTokenCookie,
-  setRefreshTokenCookie,
-  setUserProfile,
+  setRefreshTokenCookie
 } from "@/lib/auth/session";
 
 import {
@@ -160,14 +159,6 @@ export async function POST(req: Request) {
     await setRefreshTokenCookie(
       refreshToken
     );
-
-    await setUserProfile({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      account: user.account,
-      image: user.image,
-    });
 
     return Response.json(
       {

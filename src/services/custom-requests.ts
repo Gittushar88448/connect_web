@@ -4,45 +4,124 @@ import dbConnect from "@/lib/dbConnect";
 import { CustomSolutionRequestModel } from "@/model/CustomRequest";
 import { customSolutionSchema, type CustomSolutionFormValues } from "@/lib/validations/custom-solutions";
 
-export interface CustomRequestRecord extends CustomSolutionFormValues {
+export type CustomRequestAttachment = {
+  fileName: string;
+  fileUrl: string;
+  uploadedAt: Date;
+};
+
+export interface CustomRequestRecord
+  extends CustomSolutionFormValues {
   id: string;
-  status: "pending" | "accepted" | "rejected" | "appointment_booked";
+
+  status:
+    | "pending"
+    | "accepted"
+    | "rejected"
+    | "appointment_booked";
+
+  attachments: CustomRequestAttachment[];
+
   appointmentAt: string | null;
+
   adminNote: string;
+
   createdAt: string;
+
   updatedAt: string;
 }
 
-function serialize(doc: Record<string, unknown>): CustomRequestRecord {
+function serialize(
+  doc: Record<string, unknown>
+): CustomRequestRecord {
   return {
     id: String(doc._id),
+
     contactName: doc.contactName as string,
+
     contactEmail: doc.contactEmail as string,
+
     projectTitle: doc.projectTitle as string,
+
     industry: doc.industry as string,
-    problemDescription: doc.problemDescription as string,
-    technicalRequirements: doc.technicalRequirements as string,
-    integrationRequirements: doc.integrationRequirements as string[],
-    expectedScale: doc.expectedScale as string,
-    budgetRange: doc.budgetRange as string,
-    timeline: doc.timeline as string,
-    additionalRequirements: (doc.additionalRequirements as string) ?? "",
-    status: doc.status as CustomRequestRecord["status"],
+
+    problemDescription:
+      doc.problemDescription as string,
+
+    technicalRequirements:
+      doc.technicalRequirements as string,
+
+    integrationRequirements:
+      doc.integrationRequirements as string[],
+
+    expectedScale:
+      doc.expectedScale as string,
+
+    budgetRange:
+      doc.budgetRange as string,
+
+    timeline:
+      doc.timeline as string,
+
+    additionalRequirements:
+      (doc.additionalRequirements as string) ?? "",
+
+    status:
+      doc.status as CustomRequestRecord["status"],
+
     attachments: Array.isArray(doc.attachments)
-      ? (doc.attachments)
+      ? doc.attachments.map((attachment) => {
+          const item =
+            attachment as Record<string, unknown>;
+
+          return {
+            fileName: item.fileName as string,
+            fileUrl: item.fileUrl as string,
+            uploadedAt: item.uploadedAt
+              ? new Date(
+                  item.uploadedAt as string | Date
+                )
+              : new Date(),
+          };
+        })
       : [],
-    appointmentAt: doc.appointmentAt ? new Date(doc.appointmentAt as string).toISOString() : null,
-    adminNote: (doc.adminNote as string) ?? "",
-    createdAt: new Date(doc.createdAt as string).toISOString(),
-    updatedAt: new Date(doc.updatedAt as string).toISOString(),
+
+    appointmentAt: doc.appointmentAt
+      ? new Date(
+          doc.appointmentAt as string
+        ).toISOString()
+      : null,
+
+    adminNote:
+      (doc.adminNote as string) ?? "",
+
+    createdAt: new Date(
+      doc.createdAt as string
+    ).toISOString(),
+
+    updatedAt: new Date(
+      doc.updatedAt as string
+    ).toISOString(),
   };
 }
 
 export async function submitCustomRequest(
-  data: CustomSolutionFormValues
+  data: CustomSolutionFormValues,
+  files: File[] = []
 ): Promise<CustomRequestRecord> {
   await dbConnect();
-  const doc = await CustomSolutionRequestModel.create(data);
+
+  const attachments = files.map((file) => ({
+    fileName: file.name,
+    fileUrl: "",
+    uploadedAt: new Date(),
+  }));
+
+  const doc = await CustomSolutionRequestModel.create({
+    ...data,
+    attachments,
+  });
+
   return serialize(doc.toObject());
 }
 

@@ -5,7 +5,7 @@ import { ContactInfo } from "@/components/contact/contact-info";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with Connect Hub for sales, support, or partnership inquiries.",
+  description: "Get in touch with KapsInfos for sales, support, or partnership inquiries.",
 };
 
 export default function ContactPage() {

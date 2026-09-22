@@ -17,7 +17,7 @@ export function AdminSidebar() {
         <span className="flex size-7 items-center justify-center rounded-md bg-brand-signal-bright/15 text-brand-signal-bright">
           <span className="size-2 rounded-full bg-brand-signal-bright" />
         </span>
-        Connect Hub
+        KapsInfos
       </Link>
 
       <nav className="flex flex-col gap-1 p-3">

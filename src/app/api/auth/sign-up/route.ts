@@ -11,7 +11,7 @@ import {
     hashRefreshToken,
     generateTokenFamily,
 } from "@/lib/auth/refreshToken";
-import { setAccessTokenCookie, setRefreshTokenCookie, setUserProfile } from "@/lib/auth/session";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "@/lib/auth/session";
 
 
 export async function POST(req: Request) {
@@ -168,13 +168,6 @@ export async function POST(req: Request) {
 
         await setAccessTokenCookie(accessToken);
         await setRefreshTokenCookie(refreshToken);
-        await setUserProfile({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            account: user.account,
-            image: user.image,
-        });
         return Response.json(
             {
                 success: true,

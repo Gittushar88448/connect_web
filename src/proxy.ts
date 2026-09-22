@@ -80,6 +80,7 @@ const PUBLIC_API_ROUTES = new Set([
   "/api/auth/signup",
   "/api/auth/google",
   "/api/auth/callback/google",
+  "/api/auth/refresh",
   "/api/analytics/heartbeat",
 ]);
 
@@ -280,7 +281,6 @@ export const config = {
     "/admin/:path*",
     "/api/admin/:path*",
     "/api/auth/me",
-    "/api/auth/refresh",
     "/api/auth/logout",
   ],
 };

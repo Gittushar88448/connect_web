@@ -20,7 +20,7 @@ export const footerNav = {
     { label: "AI integration", href: "/modules#ai-integration-module" },
   ],
   About: [
-    { label: "About Connect Hub", href: "/about" },
+    { label: "About KapsInfos", href: "/about" },
     { label: "Trust & security", href: "/about#security" },
     { label: "Contact", href: "/contact" },
   ],
