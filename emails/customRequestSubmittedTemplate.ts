@@ -1,46 +1,46 @@
 interface CustomRequestSubmittedTemplateData {
-  name: string;
-  email: string;
-  projectTitle: string;
-  industry: string;
-  expectedScale: string;
-  budgetRange: string;
-  timeline: string;
-  integrationRequirements: string[];
+    name: string;
+    email: string;
+    projectTitle: string;
+    industry: string;
+    expectedScale: string;
+    budgetRange: string;
+    timeline: string;
+    integrationRequirements: string[];
 }
 
 function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 export default function customRequestSubmittedTemplate({
-  name,
-  email,
-  projectTitle,
-  industry,
-  expectedScale,
-  budgetRange,
-  timeline,
-  integrationRequirements,
+    name,
+    email,
+    projectTitle,
+    industry,
+    expectedScale,
+    budgetRange,
+    timeline,
+    integrationRequirements,
 }: CustomRequestSubmittedTemplateData): string {
-  const safeName = escapeHtml(name);
-  const safeEmail = escapeHtml(email);
-  const safeProjectTitle = escapeHtml(projectTitle);
-  const safeIndustry = escapeHtml(industry);
-  const safeExpectedScale = escapeHtml(expectedScale);
-  const safeBudgetRange = escapeHtml(budgetRange);
-  const safeTimeline = escapeHtml(timeline);
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeProjectTitle = escapeHtml(projectTitle);
+    const safeIndustry = escapeHtml(industry);
+    const safeExpectedScale = escapeHtml(expectedScale);
+    const safeBudgetRange = escapeHtml(budgetRange);
+    const safeTimeline = escapeHtml(timeline);
 
-  const integrationHtml =
-    integrationRequirements.length > 0
-      ? integrationRequirements
-          .map(
-            (item) => `
+    const integrationHtml =
+        integrationRequirements.length > 0
+            ? integrationRequirements
+                .map(
+                    (item) => `
               <tr>
                 <td
                   style="
@@ -65,9 +65,9 @@ export default function customRequestSubmittedTemplate({
                 </td>
               </tr>
             `
-          )
-          .join("")
-      : `
+                )
+                .join("")
+            : `
           <tr>
             <td
               style="
@@ -81,7 +81,7 @@ export default function customRequestSubmittedTemplate({
           </tr>
         `;
 
-  return `
+    return `
 <!DOCTYPE html>
 <html lang="en">
 <head>

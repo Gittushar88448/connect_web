@@ -12,7 +12,7 @@ const forgotPasswordTemplate = (
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
 
-  <title>Reset Your ConnectedHub Password</title>
+  <title>Reset Your KapsInfos Password</title>
 
   <style>
     body {
@@ -271,7 +271,7 @@ const forgotPasswordTemplate = (
                 <br /><br />
 
                 We received a request to reset the password
-                associated with your ConnectedHub account.
+                associated with your KapsInfos account.
 
                 Your connected world is waiting for you.
                 Follow the secure link below to create a new password
@@ -332,7 +332,7 @@ const forgotPasswordTemplate = (
                   This password reset link is private and intended
                   only for you. Never share it with anyone.
 
-                  ConnectedHub support will never ask you for your
+                  KapsInfos support will never ask you for your
                   password or password-reset link.
 
                 </p>
@@ -363,7 +363,7 @@ const forgotPasswordTemplate = (
             <td class="footer">
 
               <div class="footer-brand">
-                ConnectedHub
+                KapsInfos
               </div>
 
               <p class="footer-text">

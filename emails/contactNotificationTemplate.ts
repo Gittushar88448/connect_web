@@ -172,7 +172,7 @@ const contactNotificationTemplate = ({
 
             <p class="description">
               A new visitor has submitted a message through
-              the ConnectedHub Contact Us form.
+              the KapsInfos Contact Us form.
             </p>
 
             <div class="details">
@@ -230,7 +230,7 @@ const contactNotificationTemplate = ({
           <td class="footer">
 
             <p class="footer-text">
-              ConnectedHub Admin Notification
+              KapsInfos Admin Notification
             </p>
 
             <p

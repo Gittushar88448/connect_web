@@ -9,7 +9,7 @@ const passwordUpdatedTemplate = (firstName?: string) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
 
-  <title>Your ConnectedHub Password Was Updated</title>
+  <title>Your KapsInfos Password Was Updated</title>
 
   <style>
     body {
@@ -259,7 +259,7 @@ const passwordUpdatedTemplate = (firstName?: string) => {
 
                 <br /><br />
 
-                Your ConnectedHub password has been successfully
+                Your KapsInfos password has been successfully
                 updated. Everything is set for you to continue
                 exploring innovative IoT products, connected
                 devices, and smarter possibilities.
@@ -292,7 +292,7 @@ const passwordUpdatedTemplate = (firstName?: string) => {
                 <p class="security-text">
                   If you did not make this change, please secure
                   your account immediately. We recommend changing
-                  your password again and contacting ConnectedHub
+                  your password again and contacting KapsInfos
                   support if you notice any suspicious activity.
                 </p>
 
@@ -316,7 +316,7 @@ const passwordUpdatedTemplate = (firstName?: string) => {
             <td class="footer">
 
               <div class="footer-brand">
-                ConnectedHub
+                KapsInfos
               </div>
 
               <p class="footer-text">

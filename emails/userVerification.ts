@@ -288,7 +288,7 @@ const otpTemplate = (otp: string, firstName?: string) => {
             <td class="footer">
 
               <div class="footer-brand">
-                ConnectedHub
+                KapsInfos
               </div>
 
               <p class="footer-text">

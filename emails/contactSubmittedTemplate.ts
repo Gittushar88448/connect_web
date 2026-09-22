@@ -285,7 +285,7 @@ const contactSubmittedTemplate = ({
 
               Thank you for reaching out to
               <strong style="color: #ffffff;">
-                ConnectedHub
+                KapsInfos
               </strong>.
 
               <br /><br />
@@ -362,7 +362,7 @@ const contactSubmittedTemplate = ({
           <td class="footer">
 
             <div class="footer-brand">
-              ConnectedHub
+              KapsInfos
             </div>
 
             <p class="footer-text">
