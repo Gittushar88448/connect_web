@@ -9,7 +9,7 @@ import { listModules } from "@/services/modules_ops";
 export const metadata: Metadata = {
   title: "Prebuilt Modules",
   description:
-    "Prebuilt CRM, HR, notification, inventory, billing, analytics, workflow, and AI integration modules from Connect Hub, ready to deploy against your existing stack.",
+    "Prebuilt CRM, HR, notification, inventory, billing, analytics, workflow, and AI integration modules from KapsInfos, ready to deploy against your existing stack.",
 };
 
 export default async function ModulesPage() {

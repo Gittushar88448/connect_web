@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { cookies } from "next/headers";
-import { AuthProvider } from "@/components/auth/authProvider";
-import { ACCESS_TOKEN_COOKIE, ACCESS_USER_PROFILE, REFRESH_TOKEN_COOKIE } from "@/lib/auth/constants";
-
+import { AuthProvider } from "@/context/authProvider";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import { VisitorTracker } from "@/components/analytics/visitor-tracker";
 
 const displayFont = Space_Grotesk({
   variable: "--font-display",
@@ -31,49 +30,35 @@ const dataFont = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Connect Hub — Custom software, IoT services, help desk support, and prebuilt automation modules — CRM, HR, notifications, and AI — deployed services and supported by an engineering team that stays on.",
-    template: "%s — Connect Hub",
+    default: "KapsInfos — Custom software, IoT services, help desk support, and prebuilt automation modules — CRM, HR, notifications, and AI — deployed services and supported by an engineering team that stays on.",
+    template: "%s — KapsInfos",
   },
   description:
     "Custom software, IoT services, help desk support, and prebuilt automation modules — CRM, HR, notifications, and AI — deployed and supported by an engineering team that stays on.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const cookieStore = await cookies();
-
-  const accessToken =
-    cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
-
-  const refreshToken =
-    cookieStore.get(REFRESH_TOKEN_COOKIE)?.value;
-
-  const userProfileCookie =
-    cookieStore.get(ACCESS_USER_PROFILE)?.value;
-
-  let initialUser = null;
-
-  if (userProfileCookie) {
-    try {
-      initialUser = JSON.parse(
-        userProfileCookie
-      );
-    } catch {
-      initialUser = null;
-    }
-  }
-
-  const hasSession =
-    !!accessToken ||
-    !!refreshToken &&
-    !!initialUser;
+  const user = await getCurrentUser();
 
   return (
     <html lang="en">
       <body>
         <AuthProvider
-          initialUser={hasSession ? initialUser : null}
-          initialHasSession={hasSession}
+          initialUser={
+            user && {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              account: user.account,
+              userStatus: user.userStatus,
+              coinBalance: user.coinBalance,
+              image: user.image,
+            }
+          }
+          initialHasSession={Boolean(user)}
         >
+          <VisitorTracker/>
           {children}
         </AuthProvider>
       </body>

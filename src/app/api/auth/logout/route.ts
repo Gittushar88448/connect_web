@@ -4,7 +4,6 @@ import RefreshTokenModel from "@/model/RefreshToken";
 import {
   getRefreshTokenCookie,
   clearRefreshTokenCookie,
-  deleteUserProfileFromCookie,
   clearAccessTokenCookie,
 } from "@/lib/auth/session";
 
@@ -40,11 +39,10 @@ export async function POST() {
 
     await clearRefreshTokenCookie();
     await clearAccessTokenCookie();
-    await deleteUserProfileFromCookie();
     
     return Response.json({
       success: true,
-      message: "Logged out successfully",
+      message: "Logged out successfully",git
     });
 
   } catch (error) {

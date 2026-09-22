@@ -82,7 +82,7 @@ export function Navbar() {
           <span className="flex size-7 items-center justify-center rounded-md bg-brand-signal-bright/15 text-brand-signal-bright">
             <span className="size-2 rounded-full bg-brand-signal-bright" />
           </span>
-          Connect Hub
+          KapsInfos Technology
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">

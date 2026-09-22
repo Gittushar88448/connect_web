@@ -8,7 +8,7 @@ import { serviceDomains } from "@/constants/services";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Connect Hub's software services: custom development, IoT services, help desk services, blockchain development, prebuilt automation modules, and AI integration.",
+    "KapsInfos's software services: custom development, IoT services, help desk services, blockchain development, prebuilt automation modules, and AI integration.",
 };
 
 export default function ServicesPage() {

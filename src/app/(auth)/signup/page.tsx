@@ -101,7 +101,7 @@ export default function SignupPage() {
   return (
     <AuthShell
       eyebrow="Create account"
-      title="Set up your Connect Hub account"
+      title="Set up your KapsInfos account"
       description="We'll send a 6-digit code to your email to verify it's you."
       footer={
         <>

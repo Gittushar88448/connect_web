@@ -10,7 +10,7 @@ import { SecuritySection } from "@/components/about/security-section";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Connect Hub builds home-automation hardware and custom IoT software, backed by an engineering team.",
+    "KapsInfos builds home-automation hardware and custom IoT software, backed by an engineering team.",
 };
 
 export default function AboutPage() {

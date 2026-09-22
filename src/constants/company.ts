@@ -8,20 +8,26 @@ export const statusMetrics = [
 export const testimonials = [
   {
     quote:
-      "Connect Hub deployed the CRM module against our existing systems in under three weeks — no six-month integration project.",
-    name: "Priya Menon",
-    role: "Head of Operations, Veltrix Logistics",
+      "Working with Kapsinfos has been a great experience. The team brings a strong combination of technical expertise, ownership, and a practical approach to solving complex business requirements.",
+    name: "Kapil Kumar",
+    role: "Director",
   },
   {
     quote:
-      "Their help desk service cut our average ticket resolution time by more than half within the first month.",
-    name: "Daniel Okafor",
-    role: "Director of Support, GreenGrid Utilities",
+      "Kapsinfos has a strong engineering mindset and a clear focus on building reliable, scalable solutions. Being part of the core engineering team has given me the opportunity to contribute to meaningful technical work and product development.",
+    name: "Tushar",
+    role: "CTO & Core Engineering Team",
   },
   {
     quote:
-      "We needed a custom automation layer across three legacy systems. Connect Hub scoped, built, and shipped it in nine weeks.",
-    name: "Elena Vasquez",
-    role: "VP Engineering, Coldline Systems",
+      "Kapsinfos combines strong technical expertise with a practical understanding of modern digital technologies. The team's focus on innovation, quality, and collaborative execution makes it easy to turn ideas into effective digital solutions.",
+    name: "Technology & Digital Expertise",
+    role: "SEO, Marketing & Technology",
+  },
+  {
+    quote:
+      "The Kapsinfos team demonstrates strong engineering capabilities, technical problem-solving, and a collaborative approach to development. Their ability to work across modern technologies while maintaining a strong focus on quality and reliability stands out.",
+    name: "Engineering Team",
+    role: "Core Technical & Software Engineering",
   },
 ];

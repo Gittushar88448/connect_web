@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             return Response.json({
                 success: false,
                 message: "Invalid Token!!"
-            })
+            },{status: 400})
         }
 
         if (userData.forgot_pass_token_expiry < Date.now()) {

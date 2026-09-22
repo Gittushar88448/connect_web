@@ -86,7 +86,7 @@ const platformSettingsSchema = new Schema<IPlatformSettings>(
 
     storeName: {
       type: String,
-      default: "Connect Hub",
+      default: "KapsInfos",
       trim: true,
     },
   },

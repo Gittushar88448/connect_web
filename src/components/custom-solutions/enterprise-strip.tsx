@@ -22,8 +22,9 @@ export function EnterpriseStrip() {
             SLA-backed support.
           </p>
         </div>
+        {/* add support mail */}
         <a
-          href="mailto:enterprise@connecthub.example"
+          href="mailto:enterprise@kapsinfos.com"
           className="shrink-0 text-sm font-medium text-brand-signal-bright hover:underline"
         >
           Talk to our enterprise team
