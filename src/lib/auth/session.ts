@@ -85,7 +85,7 @@ export async function setAuthCookies(accessToken: string, refreshToken: string) 
   const store = await cookies();
   const common = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NEXT_ENV === "production",
     sameSite: "lax" as const,
     path: "/",
   };
@@ -109,7 +109,7 @@ export async function setOAuthStateCookie(state: string) {
   const store = await cookies();
   store.set(OAUTH_STATE_COOKIE, state, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NEXT_ENV === "production",
     sameSite: "lax",
     path: "/",
     maxAge: 10 * 60, // 10 minutes — long enough for the consent screen, no longer
