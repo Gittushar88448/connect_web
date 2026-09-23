@@ -1,7 +1,7 @@
 export const statusMetrics = [
   { label: "Client SLA uptime", value: "99.95%" },
-  { label: "Modules deployed", value: "120+" },
-  { label: "Enterprise clients", value: "80+" },
+  { label: "Modules deployed", value: "10+" },
+  { label: "Enterprise clients", value: "4+" },
   { label: "Avg. response time", value: "< 15 min" },
 ];
 

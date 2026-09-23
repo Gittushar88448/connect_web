@@ -97,7 +97,7 @@ export function Hero() {
             </div>
             <div>
               <dt className="text-xs text-white/40">Modules deployed</dt>
-              <dd className="mt-1 text-lg font-medium text-white">120+</dd>
+              <dd className="mt-1 text-lg font-medium text-white">10+</dd>
             </div>
             <div>
               <dt className="text-xs text-white/40">Avg. response</dt>

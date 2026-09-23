@@ -21,7 +21,7 @@ const milestones = [
   {
     year: "2025",
     title: "80+ enterprise clients",
-    detail: "Crossed 80 enterprise clients and 120+ module deployments across industries.",
+    detail: "Crossed 4 enterprise clients and 10+ module deployments across industries.",
   },
 ];
 
