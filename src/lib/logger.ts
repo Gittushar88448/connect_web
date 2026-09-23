@@ -1,11 +1,37 @@
 import winston from "winston";
 
-const isProduction:boolean = process.env.NEXT_ENV === "production";
-const isUAT:boolean = process.env.NEXT_ENV === "uat";
+const isProduction = process.env.NODE_ENV === "production";
+const isUAT = process.env.NEXT_ENV === "uat";
+
+const loggerTransports: winston.transport[] = [
+  // Console logs
+  new winston.transports.Console({
+    format: winston.format.combine(
+      ...(isProduction || isUAT ? [] : [winston.format.colorize()]),
+      winston.format.timestamp(),
+      winston.format.simple()
+    ),
+  }),
+];
+
+// File logging only when NOT production AND NOT UAT
+if (!isProduction && !isUAT) {
+  loggerTransports.push(
+    new winston.transports.File({
+      filename: "logs/error.log",
+      level: "error",
+    }),
+
+    new winston.transports.File({
+      filename: "logs/combined.log",
+      level: "info",
+    })
+  );
+}
 
 const logger = winston.createLogger({
   level: isProduction || isUAT ? "info" : "debug",
-  
+
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
@@ -13,28 +39,7 @@ const logger = winston.createLogger({
     winston.format.json()
   ),
 
-  transports: [
-    // Console logs
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.timestamp(),
-        winston.format.simple()
-      ),
-    }),
-
-    // Error logs
-    new winston.transports.File({
-      filename: "logs/error.log",
-      level: "error",
-    }),
-
-    // All logs
-    new winston.transports.File({
-      filename: "logs/combined.log",
-      level: "info",
-    }),
-  ],
+  transports: loggerTransports,
 });
 
 export default logger;
