@@ -459,7 +459,7 @@ export default function TermsPage() {
                 </p>
 
                 <a
-                  href="mailto:legal@kapsinfos.com"
+                  href="mailto:support@kapsinfos.com"
                   className="
                     mt-5 inline-flex items-center gap-2
                     rounded-lg border border-border
@@ -468,7 +468,7 @@ export default function TermsPage() {
                     transition-colors hover:bg-muted
                   "
                 >
-                  legal@kapsinfos.com
+                  support@kapsinfos.com
                   <ArrowUpRight className="size-4 text-primary" />
                 </a>
               </section>

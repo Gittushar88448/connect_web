@@ -6,9 +6,9 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { tintStyles, type Tint } from "@/components/shared/tint";
 
 const items: { icon: typeof Mail; label: string; value: string; tone: Tint }[] = [
-  { icon: Mail, label: "Email", value: "hello@kapsinfos.example", tone: "teal" },
-  { icon: Phone, label: "Phone", value: "+91 22 4000 1234", tone: "amber" },
-  { icon: MapPin, label: "Office", value: "Bengaluru, India", tone: "slate" },
+  { icon: Mail, label: "Email", value: "support@kapsinfos.com", tone: "teal" },
+  { icon: Phone, label: "Phone", value: "+91 9045343763", tone: "amber" },
+  { icon: MapPin, label: "Office", value: "Noida, India", tone: "slate" },
   { icon: Clock, label: "Response time", value: "Within 1 business day", tone: "teal" },
 ];
 
