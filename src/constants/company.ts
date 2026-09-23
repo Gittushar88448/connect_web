@@ -10,13 +10,13 @@ export const testimonials = [
     quote:
       "Working with Kapsinfos has been a great experience. The team brings a strong combination of technical expertise, ownership, and a practical approach to solving complex business requirements.",
     name: "Kapil Kumar",
-    role: "Director",
+    role: "Founder & Director",
   },
   {
     quote:
       "Kapsinfos has a strong engineering mindset and a clear focus on building reliable, scalable solutions. Being part of the core engineering team has given me the opportunity to contribute to meaningful technical work and product development.",
     name: "Tushar",
-    role: "CTO & Core Engineering Team",
+    role: "Co-Founder & Core Engineering Team",
   },
   {
     quote:

@@ -10,7 +10,7 @@ import { SecuritySection } from "@/components/about/security-section";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "KapsInfos builds home-automation hardware and custom IoT software, backed by an engineering team.",
+    "Kapsinfos Technology is a software and technology company focused on helping businesses build, modernize, and scale their digital operations.",
 };
 
 export default function AboutPage() {

@@ -3,10 +3,8 @@
 import { motion } from "framer-motion";
 
 const leaders = [
-  { name: "Ananya Rao", role: "Co-founder & CEO" },
-  { name: "Marcus Webb", role: "Co-founder & Head of Engineering" },
-  { name: "Sofia Chen", role: "VP, Custom Solutions" },
-  { name: "Rahul Nair", role: "Head of Platform Security" },
+  { name: "Kapil kumar", role: "founder & Director" },
+  { name: "Tushar", role: "Co-founder & Core Engineering Team" }
 ];
 
 function initials(name: string) {
