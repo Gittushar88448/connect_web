@@ -89,7 +89,7 @@ export default function TermsPage() {
               </span>
 
               <span className="rounded-full border border-white/10 px-3 py-1.5">
-                Kapsinfos
+                Kapsinfos Technology
               </span>
             </div>
           </div>

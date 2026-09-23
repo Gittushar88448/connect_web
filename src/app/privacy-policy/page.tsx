@@ -124,7 +124,7 @@ export default function PrivacyPage() {
               </span>
 
               <span className="rounded-full border border-white/10 px-3 py-1.5">
-                Kapsinfos
+                Kapsinfos Technology
               </span>
             </div>
           </div>
@@ -438,7 +438,7 @@ export default function PrivacyPage() {
                 </p>
 
                 <a
-                  href="mailto:privacy@kapsinfos.com"
+                  href="mailto:support@kapsinfos.com"
                   className="
                     mt-5 inline-flex items-center gap-2
                     rounded-lg border border-border

@@ -24,7 +24,7 @@ export function EnterpriseStrip() {
         </div>
         {/* add support mail */}
         <a
-          href="mailto:enterprise@kapsinfos.com"
+          href="mailto:support@kapsinfos.com"
           className="shrink-0 text-sm font-medium text-brand-signal-bright hover:underline"
         >
           Talk to our enterprise team
