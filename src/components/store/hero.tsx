@@ -56,7 +56,7 @@ export function Hero() {
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">
             <Sparkles className="size-3.5 text-brand-signal-bright" aria-hidden="true" />
-            80+ enterprise clients supported
+            4+ enterprise clients supported
           </span>
 
           <h1 className="mt-6 max-w-xl font-[family-name:var(--font-display)] text-4xl leading-[1.1] font-semibold text-balance sm:text-5xl lg:text-6xl">
