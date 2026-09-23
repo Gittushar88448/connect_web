@@ -62,13 +62,13 @@ export async function POST(req: Request) {
         
         const resetUrl = `${url.origin}/reset-password?token=${token}`
 
-        const html: string = forgotPasswordTemplate(resetUrl, userData.firstName);
+        const htmlData: string = forgotPasswordTemplate(resetUrl, userData.firstName);
 
         await sendEmail(
             {
-                email,
-                subject_text: "Mail For Password Reset",
-                body: html
+                to:email,
+                subject: "Mail For Password Reset",
+                html: htmlData
             }
         );
 

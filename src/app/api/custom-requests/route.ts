@@ -150,9 +150,9 @@ export async function POST(request: Request) {
 
     try {
       await sendEmail({
-        email: parsed.data.contactEmail,
-        subject_text: "Custom Solution Request Received — Kapsinfos",
-        body: customRequestSubmittedTemplate({
+        to: parsed.data.contactEmail,
+        subject: "Custom Solution Request Received — Kapsinfos",
+        html: customRequestSubmittedTemplate({
           name: parsed.data.contactName,
           email: parsed.data.contactEmail,
           projectTitle: parsed.data.projectTitle,

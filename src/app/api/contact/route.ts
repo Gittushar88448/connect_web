@@ -46,9 +46,9 @@ export async function POST(request: Request) {
      * Send confirmation email to customer.
      */
     await sendEmail({
-      email: parsed.data.email,
-      subject_text: "We received your message — ConnectedHub",
-      body: contactSubmittedTemplate({
+      to: parsed.data.email,
+      subject: "We received your message — ConnectedHub",
+      html: contactSubmittedTemplate({
         name: parsed.data.name,
         email: parsed.data.email,
         subject: parsed.data.subject,
@@ -61,9 +61,9 @@ export async function POST(request: Request) {
 
     if (notificationEmail) {
       await sendEmail({
-        email: notificationEmail,
-        subject_text: `New Contact Us message: ${parsed.data.subject}`,
-        body: contactNotificationTemplate({
+        to: notificationEmail,
+        subject: `New Contact Us message: ${parsed.data.subject}`,
+        html: contactNotificationTemplate({
           name: parsed.data.name,
           email: parsed.data.email,
           subject: parsed.data.subject,

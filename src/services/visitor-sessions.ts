@@ -29,12 +29,7 @@ function serialize(doc: Record<string, unknown>): VisitorSessionRecord {
   };
 }
 
-/**
- * Upserts a heartbeat ping from the client-side tracker. `deltaMs` is the
- * additional active time (tab visible, page open) since the last ping —
- * accumulated client-side and capped here so a suspended/resumed tab can't
- * report an inflated duration.
- */
+
 export async function recordHeartbeat(input: {
   sessionId: string;
   deltaMs: number;

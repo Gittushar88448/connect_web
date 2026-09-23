@@ -157,7 +157,7 @@ const contactNotificationTemplate = ({
           <td class="header">
 
             <div class="brand">
-              Connected<span class="brand-accent">Hub</span>
+              KapsInfos Technology
             </div>
 
           </td>
@@ -237,7 +237,7 @@ const contactNotificationTemplate = ({
               class="footer-text"
               style="margin-top: 8px;"
             >
-              © ${currentYear} Connected Hub.
+              © ${currentYear} KapsInfos Technology.
               All rights reserved.
             </p>
 

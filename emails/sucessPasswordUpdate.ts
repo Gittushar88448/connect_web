@@ -215,7 +215,7 @@ const passwordUpdatedTemplate = (firstName?: string) => {
             <td class="header">
 
               <div class="brand">
-                Connected<span class="brand-accent">Hub</span>
+                KapsInfos Technology
               </div>
 
               <div class="tagline">
@@ -261,8 +261,8 @@ const passwordUpdatedTemplate = (firstName?: string) => {
 
                 Your KapsInfos password has been successfully
                 updated. Everything is set for you to continue
-                exploring innovative IoT products, connected
-                devices, and smarter possibilities.
+                exploring innovative IoT services, connected
+                services, and smarter possibilities.
 
               </p>
 
@@ -320,14 +320,14 @@ const passwordUpdatedTemplate = (firstName?: string) => {
               </div>
 
               <p class="footer-text">
-                Smart devices. Connected systems. Smarter possibilities.
+                Smart softwares. Connected services. Smarter possibilities.
               </p>
 
               <p
                 class="footer-text"
                 style="margin-top: 10px;"
               >
-                © ${currentYear} Connected Hub.
+                © ${currentYear} KapsInfos Technology.
                 All rights reserved.
               </p>
 

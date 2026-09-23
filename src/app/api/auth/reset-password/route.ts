@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             return Response.json({
                 success: false,
                 message: "Invalid Token!!"
-            },{status: 400})
+            })
         }
 
         if (userData.forgot_pass_token_expiry < Date.now()) {
@@ -57,13 +57,13 @@ export async function POST(req: Request) {
                 message: "Failed to Update Password"
             }, { status: 400 })
         }
-        const html: string = passwordUpdatedTemplate(updatedDetails.firstName);
+        const htmldata: string = passwordUpdatedTemplate(updatedDetails.firstName);
         
         await sendEmail(
             {
-                email: userData.email,
-                subject_text: "Your ConnectedHub Password Has Been Updated",
-                body: html
+                to: userData.email,
+                subject: "Your Password Has Been Updated",
+                html: htmldata
             }
         )
         return Response.json({

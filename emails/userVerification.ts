@@ -7,7 +7,7 @@ const otpTemplate = (otp: string, firstName?: string) => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
-  <title>Verify Your Connected Hub Account</title>
+  <title>Verify Your KapsInfos Technology Account</title>
 
   <style>
     body {
@@ -204,7 +204,7 @@ const otpTemplate = (otp: string, firstName?: string) => {
             <td class="header">
 
               <div class="brand">
-                Connected<span class="brand-accent">Hub</span>
+                KapsInfos Technology
               </div>
 
               <div class="tagline">
@@ -223,7 +223,7 @@ const otpTemplate = (otp: string, firstName?: string) => {
               </div>
 
               <h1 class="title">
-                Verify Your Connected Hub Account
+                Verify Your KapsInfos Technology Account
               </h1>
 
               <p class="description">
@@ -234,8 +234,8 @@ const otpTemplate = (otp: string, firstName?: string) => {
                 }
                 <br /><br />
 
-                We received a request to verify your Connected Hub account.
-                At Connected Hub, we bring smart devices, intelligent systems,
+                We received a request to verify your KapsInfos account.
+                At KapsInfos, we bring smart devices, intelligent systems,
                 and innovative IoT solutions together in one place.
                 Verify your account below and take the first step toward
                 discovering a smarter, more connected world.
@@ -269,7 +269,7 @@ const otpTemplate = (otp: string, firstName?: string) => {
 
                 <p class="security-text">
                   Never share this verification code with anyone.
-                  Connected Hub support will never ask you for your OTP,
+                  KapsInfos Technology support will never ask you for your OTP,
                   password, or other security credentials.
                 </p>
 
@@ -292,11 +292,11 @@ const otpTemplate = (otp: string, firstName?: string) => {
               </div>
 
               <p class="footer-text">
-                Smart devices. Connected systems. Smarter possibilities.
+                Smart softwares. Connected services. Smarter possibilities.
               </p>
 
               <p class="footer-text" style="margin-top: 10px;">
-                © ${new Date().getFullYear()} Connected Hub. All rights reserved.
+                © ${new Date().getFullYear()} KapsInfos Technology. All rights reserved.
               </p>
 
             </td>

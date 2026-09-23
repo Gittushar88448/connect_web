@@ -68,16 +68,16 @@ export async function POST(req: Request) {
 
         await otpResult.save();
 
-        const html: string = emailVerificationTemplate(
+        const htmlData: string = emailVerificationTemplate(
             otp,
             firstName
         );
 
             await sendEmail(
                 {
-                    email,
-                    subject_text: `Verify Your Connected Hub Account`,
-                    body: html
+                    to: email,
+                    subject: `Verify Your Connected Hub Account`,
+                    html: htmlData
                 }
             );
 

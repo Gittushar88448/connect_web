@@ -12,6 +12,8 @@ const requiredEnv = (name: string): string => {
 
 const transporter = nodemailer.createTransport({
   host: requiredEnv("EMAIL_HOST"),
+  port: Number(requiredEnv("SMTP_PORT")),
+  secure: Number(requiredEnv("SMTP_PORT")) === 465,
   auth: {
     user: requiredEnv("EMAIL_USER"),
     pass: requiredEnv("EMAIL_PASS"),

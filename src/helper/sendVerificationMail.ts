@@ -2,34 +2,42 @@ import transporter from "@/lib/nodemailerConfig";
 import logger from "@/lib/logger";
 
 export interface IMailType {
-    email: string,
-    subject_text: string,
-    body: string
+  to: string;
+  subject: string;
+  html: string;
 }
 
-export async function sendEmail(
-    { email, subject_text, body
-    }: IMailType) {
-    try {
+export async function sendEmail({
+  to,
+  subject,
+  html,
+}: IMailType) {
+  try {
+    const fromName = process.env.EMAIL_FROM_NAME;
+    const fromAddress = process.env.EMAIL_FROM_ADDRESS;
 
-        const mailOptions = {
-            from: `${process.env.EMAIL_FROM_NAME}" <${process.env.EMAIL_FROM_ADDRESS}>`,
-
-            to: email,
-
-            subject: subject_text,
-
-            html: body,
-        };
-        const result = await transporter.sendMail(mailOptions);
-        return {
-            success: true,
-            messageId: result.messageId,
-        };
-
-    } catch (error) {
-        logger.error("Error sending verification email:", error);
-
-        throw error;
+    if (!fromName || !fromAddress) {
+      throw new Error(
+        "EMAIL_FROM_NAME and EMAIL_FROM_ADDRESS must be configured"
+      );
     }
+
+    const mailOptions = {
+      from: `"${fromName}" <${fromAddress}>`,
+      to,
+      subject,
+      html,
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+
+    return {
+      success: true,
+      messageId: result.messageId,
+    };
+  } catch (error) {
+    logger.error("Error sending email:", error);
+
+    throw error;
+  }
 }

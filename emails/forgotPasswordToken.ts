@@ -232,7 +232,7 @@ const forgotPasswordTemplate = (
             <td class="header">
 
               <div class="brand">
-                Connected<span class="brand-accent">Hub</span>
+                KapsInfos Technology
               </div>
 
               <div class="tagline">
@@ -367,14 +367,14 @@ const forgotPasswordTemplate = (
               </div>
 
               <p class="footer-text">
-                Smart devices. Connected systems. Smarter possibilities.
+                Smart softwares. Connected services. Smarter possibilities.
               </p>
 
               <p
                 class="footer-text"
                 style="margin-top: 10px;"
               >
-                © ${currentYear} Connected Hub.
+                © ${currentYear} KapsInfos Technology.
                 All rights reserved.
               </p>
 

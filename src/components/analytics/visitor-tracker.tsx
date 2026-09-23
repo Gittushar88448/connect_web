@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const COOKIE_NAME = "chub_vid";
-const HEARTBEAT_INTERVAL_MS = 15_000;
-const COOKIE_MAX_AGE_DAYS = 400; // Chrome's cap on cookie lifetime.
+const HEARTBEAT_INTERVAL_MS = 30_000;
+const COOKIE_MAX_AGE_DAYS = 400; 
 
 function getOrCreateVisitorId(): string {
   const existing = document.cookie
@@ -87,10 +87,8 @@ export function VisitorTracker() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       send(true);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // New pathname (client-side navigation) counts as a fresh page view.
   useEffect(() => {
     isNewPageView.current = true;
   }, [pathname]);
