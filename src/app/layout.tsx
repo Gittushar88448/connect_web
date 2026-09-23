@@ -30,11 +30,11 @@ const dataFont = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "KapsInfos — Custom software, IoT services, help desk support, and prebuilt automation modules — CRM, HR, notifications, and AI — deployed services and supported by an engineering team that stays on.",
+    default: "KapsInfos — AI-powered software, automation, and intelligent business solutions..",
     template: "%s — KapsInfos",
   },
   description:
-    "Custom software, IoT services, help desk support, and prebuilt automation modules — CRM, HR, notifications, and AI — deployed and supported by an engineering team that stays on.",
+    "AI-powered software, automation, and intelligent business solutions.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
