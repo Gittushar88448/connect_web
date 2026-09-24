@@ -92,6 +92,10 @@ export async function createUserByAdmin(data: AdminCreateUserInput): Promise<Use
   if (existing) {
     throw new Error("An account with this email already exists");
   }
+  const image =
+            `https://api.dicebear.com/5.x/initials/svg?seed=${encodeURIComponent(
+                `${data?.firstName} ${data.lastName ?? ""}`
+            )}`;
   const doc = await UserModel.create({
     firstName: data.firstName,
     lastName: data.lastName,
@@ -101,6 +105,7 @@ export async function createUserByAdmin(data: AdminCreateUserInput): Promise<Use
     type: accountToType(data.account),
     phone_no: data.phone_no,
     gender: data.gender,
+    image,
     dob: data.dob ? new Date(data.dob) : undefined,
     userStatus: UserStatus.ACTIVE,
   });
